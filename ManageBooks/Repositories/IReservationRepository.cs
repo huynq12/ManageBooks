@@ -8,6 +8,6 @@ namespace ManageBooks.Repositories
 		Task<Reservation> GetReservationById(int id);
 		Task<Reservation> CreateReservation(Reservation reservation);
 		Task<Reservation> UpdateReservation(Reservation reservation);
-		Task<Reservation> DeleteReservation(Reservation reservation);
+		//Task<Reservation> DeleteReservation(Reservation reservation);
 	}
 }

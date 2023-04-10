@@ -1,5 +1,6 @@
 ﻿using ManageBooks.Data;
 using ManageBooks.Models;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManageBooks.Repositories
@@ -14,20 +15,47 @@ namespace ManageBooks.Repositories
 		}
 		public async Task<Reservation> CreateReservation(Reservation reservation)
 		{
-			_context.Reservations.Add(reservation);
 
+			_context.Reservations.Add(reservation);
+			
+			foreach(var item in reservation.ReservationDetails)
+			{
+
+				var bookToUpdate = _context.Books.Find(item.BookId);
+				if(bookToUpdate != null)
+				{
+					bookToUpdate.AvailableCopies -= 1;
+					var reservationDetail = new ReservationDetail();
+					reservationDetail.BookId = item.BookId;
+					reservationDetail.IsCheckedOut = true;
+					reservationDetail.CheckedOut = DateTime.Now;
+					reservationDetail.IsReturned = false;
+					_context.ReservationDetails.Add(reservationDetail);
+				}
+				
+			}
 			await _context.SaveChangesAsync();
 			return reservation;
 		}
 
-		public async Task<Reservation> DeleteReservation(Reservation reservation)
+		/*public async Task<Reservation> DeleteReservation(Reservation reservation)
 		{
+			foreach(var reservationDetail in reservation.ReservationDetails)
+			{
+				var bookToUpdate = _context.Books.Find(reservationDetail.BookId);
+				if(bookToUpdate != null)
+				{
+					bookToUpdate.AvailableCopies += 1;
+					_context.Remove(reservationDetail);
+				}
+			}
 			_context.Reservations.Remove(reservation);
 			await _context.SaveChangesAsync();
-			return reservation;
-		}
 
-		public async Task<Reservation?> GetReservationById(int id)
+			return reservation;
+		}*/
+
+		public async Task<Reservation> GetReservationById(int id)
 		{
 			return await _context.Reservations.FindAsync(id);
 		}
@@ -39,7 +67,24 @@ namespace ManageBooks.Repositories
 
 		public async Task<Reservation> UpdateReservation(Reservation reservation)
 		{
-			_context.Reservations.Update(reservation);
+			foreach (var item in reservation.ReservationDetails)
+			{
+
+				var bookToUpdate = _context.Books.Find(item.BookId);
+				if (bookToUpdate != null)
+				{
+					
+					var reservationDetail = new ReservationDetail();
+					reservationDetail.BookId = item.BookId;
+					if(reservationDetail.IsReturned == true)
+					{
+						bookToUpdate.AvailableCopies += 1; 
+					}
+					_context.ReservationDetails.Add(reservationDetail);
+					_context.Reservations.Update(reservation);
+				}
+
+			}
 			await _context.SaveChangesAsync();
 			return reservation;
 		}
