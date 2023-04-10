@@ -76,6 +76,10 @@ namespace ManageBooks.Repositories
 					
 					var reservationDetail = new ReservationDetail();
 					reservationDetail.BookId = item.BookId;
+					reservationDetail.IsCheckedOut = item.IsCheckedOut;
+					reservationDetail.CheckedOut = item.CheckedOut;
+					reservationDetail.IsReturned = item.IsReturned;
+					reservationDetail.Returned = item.Returned;
 					if(reservationDetail.IsReturned == true)
 					{
 						bookToUpdate.AvailableCopies += 1; 
