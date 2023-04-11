@@ -17,7 +17,7 @@ namespace ManageBooks.Controllers
 		}
 
 
-		[HttpGet("books")]
+		[HttpGet]
 		public async Task<IActionResult> GetBooks()
 		{
 			var result = await _bookRepository.GetBooks();

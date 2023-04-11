@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManageBooks", "ManageBooks\ManageBooks.csproj", "{56FE2F4F-F308-4453-9986-9779817425C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ManageBooks", "ManageBooks\ManageBooks.csproj", "{56FE2F4F-F308-4453-9986-9779817425C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{236C7D6F-6AF8-49C5-9F1F-E9C31F452A0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{236C7D6F-6AF8-49C5-9F1F-E9C31F452A0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryManager", "LibraryManager\LibraryManager.csproj", "{875BAF62-A9ED-4118-A995-D530179A49E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{236C7D6F-6AF8-49C5-9F1F-E9C31F452A0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{236C7D6F-6AF8-49C5-9F1F-E9C31F452A0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{236C7D6F-6AF8-49C5-9F1F-E9C31F452A0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{875BAF62-A9ED-4118-A995-D530179A49E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{875BAF62-A9ED-4118-A995-D530179A49E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{875BAF62-A9ED-4118-A995-D530179A49E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{875BAF62-A9ED-4118-A995-D530179A49E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

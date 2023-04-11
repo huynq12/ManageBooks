@@ -84,11 +84,12 @@ namespace ManageBooks.Repositories
 					{
 						bookToUpdate.AvailableCopies += 1; 
 					}
-					_context.ReservationDetails.Add(reservationDetail);
+					//_context.ReservationDetails.Add(reservationDetail);
 					_context.Reservations.Update(reservation);
 				}
 
 			}
+			
 			await _context.SaveChangesAsync();
 			return reservation;
 		}

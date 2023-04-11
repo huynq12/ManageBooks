@@ -1,0 +1,42 @@
+﻿@page "/books"
+@using LibraryManager.Services;
+@inject IBookService BookService
+
+@if(BookService.Books == null)
+{
+	<div>Loading</div>
+}
+<table class="table">
+	<thead>
+		<tr>
+			<th>Tiêu đề</th>
+			<th>Tác giả</th>
+			<th>Nhà xuất bản</th>
+			<th>Thể loại</th>
+			<th>Tổng số bản in</th>
+			<th>Số bản có sẵn</th>
+			<th>Mô tả</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var book in BookService.Books)
+		{
+			<tr>
+				<td>@book.Title</td>
+				<td>@book.Author</td>
+				<td>@book.Publisher</td>
+				<td>@book.Genre</td>
+				<td>@book.TotalCopies</td>
+				<td>@book.AvailableCopies</td>
+				<td>@book.Description</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+@code {
+	protected override async Task OnInitializedAsync()
+	{
+		await BookService.GetBooks();
+	}
+}
