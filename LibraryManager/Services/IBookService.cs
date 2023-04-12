@@ -7,7 +7,7 @@ namespace LibraryManager.Services
 	{
 		List<Book> Books { get; set; }
 		Task GetBooks();
-		Task GetBookById(int id);
+		Task<Book?> GetBookById(int id);
 		Task<Book?> GetBookByTitle(string title);
 		Task<Book?> GetBookByAuthor(string author);
 		Task CreateBook(Book book);

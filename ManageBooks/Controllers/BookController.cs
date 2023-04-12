@@ -24,7 +24,7 @@ namespace ManageBooks.Controllers
 			return Ok(result);
 		}
 
-		[HttpGet("book/{id}")]
+		[HttpGet("id/{id}")]
 		public async Task<IActionResult> GetBookById(int id)
 		{
 			var result = await _bookRepository.GetBookById(id);
@@ -35,7 +35,7 @@ namespace ManageBooks.Controllers
 			return Ok(result);
 		}
 
-		[HttpGet("books/{title}")]
+		[HttpGet("title/{title}")]
 		public async Task<IActionResult> GetBookByTitle(string title)
 		{
 			var result = await _bookRepository.GetBookByTitle(title);
@@ -46,7 +46,7 @@ namespace ManageBooks.Controllers
 			return Ok(result);	
 		}
 
-		[HttpGet("books/{author}")]
+		[HttpGet("author/{author}")]
 		public async Task<IActionResult> GetBookByAuthor(string author)
 		{
 			var result = await _bookRepository.GetBookByAuthor(author);
@@ -57,7 +57,7 @@ namespace ManageBooks.Controllers
 			return Ok(result);
 		}
 
-		[HttpPost("book/create")] 
+		[HttpPost("create")] 
 		public async Task<IActionResult> CreateBook(Book book)
 		{
 			if(!ModelState.IsValid)
@@ -73,7 +73,7 @@ namespace ManageBooks.Controllers
 
 		}
 
-		[HttpPut("book/update/{id}")]
+		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateBook(int id,[FromBody]Book book) {
 		
 			var existingBook = await _bookRepository.GetBookById(id);
@@ -94,7 +94,7 @@ namespace ManageBooks.Controllers
 
 		}
 
-		[HttpDelete("book/delete/{id}")]
+		[HttpDelete("delete/{id}")]
 		public async Task<IActionResult> DeleteBook(int id)
 		{
 			var existingBook = await _bookRepository.GetBookById(id);

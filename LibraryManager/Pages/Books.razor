@@ -1,6 +1,7 @@
 ﻿@page "/books"
 @using LibraryManager.Services;
 @inject IBookService BookService
+@inject NavigationManager NavigationManager
 
 @if(BookService.Books == null)
 {
@@ -9,6 +10,7 @@
 <table class="table">
 	<thead>
 		<tr>
+			<th>Mã sách</th>
 			<th>Tiêu đề</th>
 			<th>Tác giả</th>
 			<th>Nhà xuất bản</th>
@@ -22,6 +24,7 @@
 		@foreach(var book in BookService.Books)
 		{
 			<tr>
+				<td>@book.BookId</td>
 				<td>@book.Title</td>
 				<td>@book.Author</td>
 				<td>@book.Publisher</td>
@@ -29,6 +32,9 @@
 				<td>@book.TotalCopies</td>
 				<td>@book.AvailableCopies</td>
 				<td>@book.Description</td>
+				<button class="btn btn-primary" @onclick="(()=>EditHandle(book.BookId))">
+					<i class="oi oi-pencil"></i>
+				</button>
 			</tr>
 		}
 	</tbody>
@@ -38,5 +44,9 @@
 	protected override async Task OnInitializedAsync()
 	{
 		await BookService.GetBooks();
+	}
+	void EditHandle(int id)
+	{
+		NavigationManager.NavigateTo($"/book/{id}");
 	}
 }

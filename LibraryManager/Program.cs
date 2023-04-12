@@ -14,7 +14,7 @@ builder.Services.AddScoped<IBookService, BookService>();
 
 builder.Services.AddScoped(sp => new HttpClient
 {
-    BaseAddress = new Uri("https://localhost:7196/")
+    BaseAddress = new Uri("http://localhost:7100/")
 });
 var app = builder.Build();
 

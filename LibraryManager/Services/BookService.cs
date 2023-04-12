@@ -1,13 +1,17 @@
 ﻿using ManageBooks.Models;
+using Microsoft.AspNetCore.Components;
+using System.Net;
 
 namespace LibraryManager.Services
 {
 	public class BookService : IBookService
 	{
 		private readonly HttpClient _httpClient;
+		private readonly NavigationManager _navigationManager;
 
-		public BookService(HttpClient httpClient) {
+		public BookService(HttpClient httpClient, NavigationManager navigationManager) {
 			_httpClient = httpClient;
+			_navigationManager = navigationManager;
 		}
 		public List<Book> Books { get ; set ; } = new List<Book>();
 
@@ -26,9 +30,14 @@ namespace LibraryManager.Services
 			throw new NotImplementedException();
 		}
 
-		public Task GetBookById(int id)
+		public async Task<Book?> GetBookById(int id)
 		{
-			throw new NotImplementedException();
+			var result = await _httpClient.GetAsync($"/api/Book/id/{id}");
+			if (result.StatusCode == HttpStatusCode.OK)
+			{
+				return await result.Content.ReadFromJsonAsync<Book>();
+			}
+			return null;
 		}
 
 		public Task<Book?> GetBookByTitle(string title)
@@ -45,9 +54,11 @@ namespace LibraryManager.Services
 			}
 		}
 
-		public Task UpdateBook(int id, Book book)
+		public async Task UpdateBook(int id, Book book)
 		{
-			throw new NotImplementedException();
+			await _httpClient.PutAsJsonAsync($"/api/Book/{id}",book);
+			_navigationManager.NavigateTo("books");
+
 		}
 	}
 }
