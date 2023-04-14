@@ -1,11 +1,11 @@
-﻿using ManageBooks.Models;
-using ManageBooks.Repositories;
+﻿using ManageBooks.Interfaces;
+using ManageBooks.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManageBooks.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 
 	public class BookController : ControllerBase
@@ -86,9 +86,8 @@ namespace ManageBooks.Controllers
 			existingBook.AvailableCopies= book.AvailableCopies;
 			existingBook.TotalCopies= book.TotalCopies;
 			existingBook.Publisher = book.Publisher;
-			existingBook.Genre= book.Genre;
+			existingBook.CategoryId = book.CategoryId;
 			existingBook.Description = book.Description;
-			
 			var updatedBook = await _bookRepository.UpdateBook(existingBook);	
 			return Ok(updatedBook);
 

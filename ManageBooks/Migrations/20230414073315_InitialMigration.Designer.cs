@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManageBooks.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230408064900_updaate")]
-    partial class updaate
+    [Migration("20230414073315_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,11 +40,11 @@ namespace ManageBooks.Migrations
                     b.Property<int>("AvailableCopies")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Genre")
+                    b.Property<int?>("CategoryId")
                         .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Publisher")
@@ -60,40 +60,37 @@ namespace ManageBooks.Migrations
 
                     b.HasKey("BookId");
 
-                    b.ToTable("Books");
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Book");
                 });
 
-            modelBuilder.Entity("ManageBooks.Models.Reservation", b =>
+            modelBuilder.Entity("ManageBooks.Models.Order", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
-                    b.Property<int?>("BookId")
+                    b.Property<DateTime?>("CheckedOut")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CustomerEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("Returned")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("CustomerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<string>("CustomerPhone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("OrderId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.ToTable("Reservations");
+                    b.ToTable("Order");
                 });
 
-            modelBuilder.Entity("ManageBooks.Models.ReservationDetail", b =>
+            modelBuilder.Entity("ManageBooks.Models.OrderDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -104,26 +101,16 @@ namespace ManageBooks.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("CheckedOut")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsCheckedOut")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsReturned")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("ReservationId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("Returned")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReservationId");
+                    b.HasIndex("BookId");
 
-                    b.ToTable("ReservationDetails");
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderDetail");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -324,18 +311,80 @@ namespace ManageBooks.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ManageBooks.Models.Reservation", b =>
+            modelBuilder.Entity("Shared.Models.Category", b =>
                 {
-                    b.HasOne("ManageBooks.Models.Book", null)
-                        .WithMany("Reservations")
-                        .HasForeignKey("BookId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("ManageBooks.Models.ReservationDetail", b =>
+            modelBuilder.Entity("Shared.Models.Customer", b =>
                 {
-                    b.HasOne("ManageBooks.Models.Reservation", null)
-                        .WithMany("ReservationDetails")
-                        .HasForeignKey("ReservationId");
+                    b.Property<int>("CustomerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"));
+
+                    b.Property<string>("CustomerEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerPhone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CustomerId");
+
+                    b.ToTable("Customer");
+                });
+
+            modelBuilder.Entity("ManageBooks.Models.Book", b =>
+                {
+                    b.HasOne("Shared.Models.Category", "Category")
+                        .WithMany("Books")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("ManageBooks.Models.OrderDetail", b =>
+                {
+                    b.HasOne("ManageBooks.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ManageBooks.Models.Order", "Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -389,14 +438,14 @@ namespace ManageBooks.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ManageBooks.Models.Book", b =>
+            modelBuilder.Entity("ManageBooks.Models.Order", b =>
                 {
-                    b.Navigation("Reservations");
+                    b.Navigation("OrderDetails");
                 });
 
-            modelBuilder.Entity("ManageBooks.Models.Reservation", b =>
+            modelBuilder.Entity("Shared.Models.Category", b =>
                 {
-                    b.Navigation("ReservationDetails");
+                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

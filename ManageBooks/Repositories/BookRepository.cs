@@ -1,10 +1,11 @@
 ﻿using ManageBooks.Data;
+using ManageBooks.Interfaces;
 using ManageBooks.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManageBooks.Repositories
 {
-	public class BookReservation : IBookRepository
+    public class BookReservation : IBookRepository
 	{
 		private readonly DataContext _context;
 
@@ -53,8 +54,6 @@ namespace ManageBooks.Repositories
 			await _context.SaveChangesAsync();
 			return book;
 		}
-
-	
 
 		
 	}

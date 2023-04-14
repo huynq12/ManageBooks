@@ -1,4 +1,4 @@
-﻿using ManageBooks.Repositories;
+﻿using ManageBooks.Interfaces;
 using ManageBooks.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,7 @@ using System.Text;
 
 namespace ManageBooks.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class AuthController : ControllerBase
 	{

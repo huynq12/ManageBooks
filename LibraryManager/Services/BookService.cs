@@ -57,7 +57,6 @@ namespace LibraryManager.Services
 		public async Task UpdateBook(int id, Book book)
 		{
 			await _httpClient.PutAsJsonAsync($"/api/Book/{id}",book);
-			_navigationManager.NavigateTo("books");
 
 		}
 	}

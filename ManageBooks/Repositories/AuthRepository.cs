@@ -1,4 +1,5 @@
-﻿using ManageBooks.Users;
+﻿using ManageBooks.Interfaces;
+using ManageBooks.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace ManageBooks.Repositories
 {
-	public class AuthRepository : IAuthRepository
+    public class AuthRepository : IAuthRepository
 	{
 		private readonly UserManager<IdentityUser> _userManager;
 		private readonly IConfiguration _configuration;
