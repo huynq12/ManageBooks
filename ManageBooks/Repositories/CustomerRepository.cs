@@ -15,7 +15,7 @@ namespace ManageBooks.Repositories
 		public async Task<Customer> CreateCustomer(Customer customer)
 		{
 			_context.Customers.Add(customer);
-			customer.Ordering = false;
+			customer.OrderingStatus = Shared.Enum.Status.Active;
 			await _context.SaveChangesAsync();	
 			return customer;
 		}
@@ -30,16 +30,10 @@ namespace ManageBooks.Repositories
 			return await _context.Customers.OrderBy(x=>x.CustomerName).ToListAsync();
 		}
 
-		/*public Task<List<Customer>> GetOrderingCustomers()
+		public async Task<List<Customer>> GetOrderingCustomers()
 		{
-			var orders = _context.Orders.Where(x => x.Status == Shared.Enum.Status.Active).ToList();
-
-			var orderingCustomers = new List<Customer>();
-			foreach (var order in orders)
-			{
-				return 
-			}
-		}*/
+			return await _context.Customers.Where(x=>x.OrderingStatus == Shared.Enum.Status.Active).ToListAsync();
+		}
 
 		public async Task<Customer> UpdateCustomer(Customer customer)
 		{

@@ -24,6 +24,20 @@ namespace ManageBooks.Controllers
 			return Ok(result);
 		}
 
+		[HttpGet("{id}")]
+		public async Task<IActionResult> GetCustomerById(int id)
+		{
+			var result = _customerRepository.GetCustomerById(id);
+			return Ok(result);
+		}
+
+		[HttpGet("orderingCustomer")]
+		public async Task<IActionResult> GetOrderingCustomers()
+		{
+			var result = await _customerRepository.GetOrderingCustomers();
+			return Ok(result);
+		}
+
 		[HttpPost]
 		public async Task<IActionResult> CreateCustomer([FromBody]Customer customer)
 		{

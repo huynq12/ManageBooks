@@ -9,6 +9,7 @@ namespace Shared.Enum
 {
 	public enum Status
 	{
+		None,
 		Active,
 		Returned,
 		Expired

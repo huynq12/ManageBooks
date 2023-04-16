@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.Enum;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -14,6 +15,6 @@ namespace Shared.Models
 		public string CustomerName { get; set; }
 		public string CustomerEmail { get; set; }
 		public string CustomerPhone { get; set; }
-		public bool Ordering { get; set; }
+		public Status OrderingStatus { get; set; }
 	}
 }

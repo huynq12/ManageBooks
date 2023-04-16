@@ -83,11 +83,14 @@ namespace ManageBooks.Controllers
 				Returned = DateTime.Now.AddDays(14),
 				Status = Shared.Enum.Status.Active
 			});
-			orderingCustomer.Ordering = true;
+
+			//update customer status
+			orderingCustomer.OrderingStatus = Shared.Enum.Status.Active;
 			await _customerRepository.UpdateCustomer(orderingCustomer);
 
+			//update book quantity after customer return book
 			await _bookRepository.UpdateBookQuantityAfterCheckout(book);
-			//await _customerRepository.Updat
+			
 			return CreatedAtAction(nameof(GetOrderById), new { id = newOrder.OrderId }, newOrder);
 
 		}
@@ -103,12 +106,18 @@ namespace ManageBooks.Controllers
 			}
 			// existing book in active status
 			var bookToUpdate = await _bookRepository.GetBookById(existingOrder.BookId);
+			//get customer who returns
+			var customer = _customerRepository.GetCustomerById(existingOrder.CustomerId);
+
 			//update status
 			existingOrder.Status = order.Status;
 			//check status to update quantity
 			if(existingOrder.Status== Shared.Enum.Status.Returned)
 			{
 				await _bookRepository.UpdateBookQuantityAfterReturn(bookToUpdate);
+				customer.OrderingStatus = Shared.Enum.Status.Returned;
+				await _customerRepository.UpdateCustomer(customer);
+
 			}
 
 			var updatedOrder = await _orderRepository.UpdateOrderStatus(existingOrder);
