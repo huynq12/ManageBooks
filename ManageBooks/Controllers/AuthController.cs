@@ -20,7 +20,7 @@ namespace ManageBooks.Controllers
 			_authRepository= authRepository;
 		}
 
-
+		//đăng kí
 		[HttpPost("register")]
 		public async Task<IActionResult> RegisterAsync(RegisterModel model)
 		{
@@ -36,7 +36,7 @@ namespace ManageBooks.Controllers
 			}
 			return BadRequest("Some properties are not valid!");
 		}
-
+		//đăng nhập
 		[HttpPost("login")]
 		public async Task<IActionResult> LoginAsync(LoginModel model)
 		{

@@ -15,14 +15,14 @@ namespace ManageBooks.Controllers
 			_categoryRepository = categoryRepository;
 		}
 
-
+		//lấy ra danh sách các thể loại
 		[HttpGet]
 		public async Task<IActionResult> GetCategories()
 		{
 			var result = await _categoryRepository.GetCategories();
 			return Ok(result);
 		}
-
+		//tìm thể loại theo id
 		[HttpGet("id/{id}")]
 		public async Task<IActionResult> GetBookById(int id)
 		{
@@ -33,7 +33,7 @@ namespace ManageBooks.Controllers
 			}
 			return Ok(result);
 		}
-
+		//khởi tạo thể loại, chủ đề cho sách
 		[HttpPost("create")]
 		public async Task<IActionResult> CreateCategory(Category category)
 		{
@@ -45,6 +45,7 @@ namespace ManageBooks.Controllers
 			return Ok(result);
 
 		}
+		//chỉnh sửa tên,mô tả thể loại
 		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateCategory(int id,Category category)
 		{

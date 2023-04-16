@@ -21,14 +21,14 @@ namespace ManageBooks.Controllers
 			_mapper = mapper;
 		}
 
-
+		//in ra danh sách các cuốn sách của thư viện
 		[HttpGet]
 		public async Task<IActionResult> GetBooks()
 		{
 			var result = await _bookRepository.GetBooks();
 			return Ok(result);
 		}
-
+		//tìm sách theo id
 		[HttpGet("id/{id}")]
 		public async Task<IActionResult> GetBookById(int id)
 		{
@@ -39,7 +39,7 @@ namespace ManageBooks.Controllers
 			}
 			return Ok(result);
 		}
-
+		//tìm sách theo tên
 		[HttpGet("title/{title}")]
 		public async Task<IActionResult> GetBookByTitle(string title)
 		{
@@ -50,7 +50,7 @@ namespace ManageBooks.Controllers
 			}
 			return Ok(result);	
 		}
-
+		//tìm sách theo tác giả
 		[HttpGet("author/{author}")]
 		public async Task<IActionResult> GetBookByAuthor(string author)
 		{
@@ -61,7 +61,7 @@ namespace ManageBooks.Controllers
 			}
 			return Ok(result);
 		}
-
+		//tạo sách trên hệ thống
 		[HttpPost("create")] 
 		public async Task<IActionResult> CreateBook([FromBody] BookDto bookDto)
 		{
@@ -83,7 +83,7 @@ namespace ManageBooks.Controllers
 			return CreatedAtAction(nameof(GetBookById), new { id = book.BookId }, book);
 
 		}
-
+		//chỉnh sửa thông tin sách
 		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateBook(int id,[FromBody]BookDto bookDto) {
 		
@@ -105,7 +105,7 @@ namespace ManageBooks.Controllers
 			return Ok(updatedBook);
 
 		}
-
+		//xoá sách
 		[HttpDelete("delete/{id}")]
 		public async Task<IActionResult> DeleteBook(int id)
 		{

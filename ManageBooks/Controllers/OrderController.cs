@@ -22,28 +22,28 @@ namespace ManageBooks.Controllers
 			_bookRepository = bookRepository;
 			_customerRepository = customerRepository;
 		}
-
+		//lấy ra danh sách tất cả các đơn đặt mượn sách(bao gồm cả đơn đã trả)
 		[HttpGet]
 		public async Task<IActionResult> GetOrders()
 		{
 			var result = await _orderRepository.GetOrders();
 			return Ok(result);
 		}
-
+		//lấy ra danh sách các đơn đang mượn
 		[HttpGet("activeOrder")]
 		public async Task<IActionResult> GetActiveOrders()
 		{
 			var result = await _orderRepository.GetActiveOrders();
 			return Ok(result);
 		}
-
+		//lấy ra danh sách các đơn quá hạn để thông báo nhắc nhở bạn đọc
 		[HttpGet("expiredOrders")]
 		public async Task<IActionResult> GetExpiredOrders()
 		{
 			var result = await _orderRepository.GetExpiredOrders();
 			return Ok(result);
 		}
-
+		//tìm đon mượn qua id
 		[HttpGet("{id}")]
 		public async Task<IActionResult> GetOrderById(int id)
 		{
@@ -54,7 +54,7 @@ namespace ManageBooks.Controllers
 			}
 			return Ok(order);
 		}
-
+		//khởi tạo đơn mượn sách
 		[HttpPost]
 		public async Task<ActionResult> CreateOrder([FromBody] OrderDto orderDto)
 		{
@@ -94,7 +94,7 @@ namespace ManageBooks.Controllers
 			return CreatedAtAction(nameof(GetOrderById), new { id = newOrder.OrderId }, newOrder);
 
 		}
-
+		//update trạng thái đơn mượn
 		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] Order order)
 		{
@@ -124,7 +124,7 @@ namespace ManageBooks.Controllers
 			return Ok(updatedOrder);
 
 		}
-
+		//xoá đơn mượn
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteOrder(int id)
 		{

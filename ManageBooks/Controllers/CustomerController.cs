@@ -16,13 +16,14 @@ namespace ManageBooks.Controllers
 		{
 			_customerRepository = customerRepository;
 		}
-
+		//lấy ra danh sách bạn đọc trên hệ thống
 		[HttpGet]
 		public async Task<IActionResult> GetCustomers()
 		{
 			var result = await _customerRepository.GetCustomers();
 			return Ok(result);
 		}
+		//tìm bạn đọc theo id
 
 		[HttpGet("{id}")]
 		public async Task<IActionResult> GetCustomerById(int id)
@@ -30,14 +31,14 @@ namespace ManageBooks.Controllers
 			var result = _customerRepository.GetCustomerById(id);
 			return Ok(result);
 		}
-
+		//lấy danh sách các bạn đọc đang mượn sách
 		[HttpGet("orderingCustomer")]
 		public async Task<IActionResult> GetOrderingCustomers()
 		{
 			var result = await _customerRepository.GetOrderingCustomers();
 			return Ok(result);
 		}
-
+		
 		[HttpPost]
 		public async Task<IActionResult> CreateCustomer([FromBody]Customer customer)
 		{
@@ -48,7 +49,7 @@ namespace ManageBooks.Controllers
 			var newCustomer = await _customerRepository.CreateCustomer(customer);
 			return Ok(newCustomer);
 		}
-
+		//chỉnh sửa thông tin bạn đọc
 		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateCustomer(int id,[FromBody]Customer customer) {
 			var existingCustomer = _customerRepository.GetCustomerById(id);
