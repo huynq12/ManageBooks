@@ -14,11 +14,13 @@ namespace ManageBooks.Controllers
 	{
 		private readonly IOrderRepository _orderRepository;
 		private readonly IBookRepository _bookRepository;
+		private readonly ICustomerRepository _customerRepository;
 
-		public OrderController(IOrderRepository orderRepository,IBookRepository bookRepository)
+		public OrderController(IOrderRepository orderRepository,IBookRepository bookRepository,ICustomerRepository customerRepository)
 		{
 			_orderRepository = orderRepository;
 			_bookRepository = bookRepository;
+			_customerRepository = customerRepository;
 		}
 
 		[HttpGet]
@@ -27,6 +29,14 @@ namespace ManageBooks.Controllers
 			var result = await _orderRepository.GetOrders();
 			return Ok(result);
 		}
+
+		[HttpGet("activeOrder")]
+		public async Task<IActionResult> GetActiveOrders()
+		{
+			var result = await _orderRepository.GetActiveOrders();
+			return Ok(result);
+		}
+
 		[HttpGet("expiredOrders")]
 		public async Task<IActionResult> GetExpiredOrders()
 		{
@@ -59,6 +69,11 @@ namespace ManageBooks.Controllers
 			{
 				return BadRequest("The book is not available for borrowing");
 			}
+			var orderingCustomer = _customerRepository.GetCustomerById(orderDto.CustomerId);
+			if (orderingCustomer == null)
+			{
+				return NotFound("The customer does nto exist.");
+			}
 
 			var newOrder = await _orderRepository.CreateOrder(new Order()
 			{
@@ -68,9 +83,11 @@ namespace ManageBooks.Controllers
 				Returned = DateTime.Now.AddDays(14),
 				Status = Shared.Enum.Status.Active
 			});
+			orderingCustomer.Ordering = true;
+			await _customerRepository.UpdateCustomer(orderingCustomer);
 
-			var result = await _bookRepository.UpdateBookQuantityAfterCheckout(book);
-
+			await _bookRepository.UpdateBookQuantityAfterCheckout(book);
+			//await _customerRepository.Updat
 			return CreatedAtAction(nameof(GetOrderById), new { id = newOrder.OrderId }, newOrder);
 
 		}

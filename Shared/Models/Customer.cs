@@ -14,6 +14,6 @@ namespace Shared.Models
 		public string CustomerName { get; set; }
 		public string CustomerEmail { get; set; }
 		public string CustomerPhone { get; set; }
-		//public bool Ordering { get; set; }
+		public bool Ordering { get; set; }
 	}
 }

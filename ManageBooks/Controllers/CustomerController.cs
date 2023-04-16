@@ -37,8 +37,8 @@ namespace ManageBooks.Controllers
 
 		[HttpPut("{id}")]
 		public async Task<IActionResult> UpdateCustomer(int id,[FromBody]Customer customer) {
-			var existingCustomer = await _customerRepository.GetCustomerById(id);
-			if (existingCustomer != null)
+			var existingCustomer = _customerRepository.GetCustomerById(id);
+			if (existingCustomer == null)
 			{
 				return NotFound();
 			}

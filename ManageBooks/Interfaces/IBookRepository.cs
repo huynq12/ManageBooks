@@ -13,7 +13,6 @@ namespace ManageBooks.Interfaces
         Task<Book> UpdateBook(Book book);
         Task<Book> UpdateBookQuantityAfterCheckout(Book book);
         Task<Book> UpdateBookQuantityAfterReturn(Book book);
-
 		Task<Book> DeleteBook(Book book);
     }
 }

@@ -15,13 +15,14 @@ namespace ManageBooks.Repositories
 		public async Task<Customer> CreateCustomer(Customer customer)
 		{
 			_context.Customers.Add(customer);
+			customer.Ordering = false;
 			await _context.SaveChangesAsync();	
 			return customer;
 		}
 
-		public async Task<Customer> GetCustomerById(int id)
+		public  Customer? GetCustomerById(int id)
 		{
-			return await _context.Customers.FirstOrDefaultAsync(x => x.CustomerId == id);
+			return _context.Customers.FirstOrDefault(c => c.CustomerId == id);
 		}
 
 		public async Task<List<Customer>> GetCustomers()
@@ -46,5 +47,12 @@ namespace ManageBooks.Repositories
 			await _context.SaveChangesAsync();
 			return customer;
 		}
+
+		/*public async Task<Customer> UpdateCustomerStatus(Customer customer)
+		{
+			
+			await _context.SaveChangesAsync();
+			return customer;
+		}*/
 	}
 }
