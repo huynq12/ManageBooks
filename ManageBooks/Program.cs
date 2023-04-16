@@ -1,8 +1,11 @@
+using AutoMapper;
 using ManageBooks.Data;
+using ManageBooks.Helper;
 using ManageBooks.Interfaces;
 using ManageBooks.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -21,10 +24,18 @@ builder.Services.AddDbContext<DataContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
 });
 
-builder.Services.AddScoped<IBookRepository, BookReservation>();
+builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
+var mapperConfig = new MapperConfiguration(map =>
+{
+	map.AddProfile<AppMapper>();
+});
+builder.Services.AddSingleton(mapperConfig.CreateMapper());
 
 builder.Services.AddSwaggerGen(c =>
 {

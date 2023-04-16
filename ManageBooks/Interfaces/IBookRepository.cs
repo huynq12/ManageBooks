@@ -1,4 +1,5 @@
-﻿using ManageBooks.Models;
+﻿using ManageBooks.Dtos;
+using ManageBooks.Models;
 
 namespace ManageBooks.Interfaces
 {
@@ -10,6 +11,9 @@ namespace ManageBooks.Interfaces
         Task<Book?> GetBookByAuthor(string author);
         Task<Book> CreateBook(Book book);
         Task<Book> UpdateBook(Book book);
-        Task<Book> DeleteBook(Book book);
+        Task<Book> UpdateBookQuantityAfterCheckout(Book book);
+        Task<Book> UpdateBookQuantityAfterReturn(Book book);
+
+		Task<Book> DeleteBook(Book book);
     }
 }

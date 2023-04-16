@@ -1,21 +1,25 @@
-﻿using ManageBooks.Data;
+﻿using AutoMapper;
+using ManageBooks.Data;
+using ManageBooks.Dtos;
 using ManageBooks.Interfaces;
 using ManageBooks.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManageBooks.Repositories
 {
-    public class BookReservation : IBookRepository
+    public class BookRepository : IBookRepository
 	{
 		private readonly DataContext _context;
+		private readonly IMapper _mapper;
 
-		public BookReservation(DataContext context)
+		public BookRepository(DataContext context,IMapper mapper)
 		{
 			_context = context;
+			_mapper=mapper;
 		}
 		public async Task<Book> CreateBook(Book book)
 		{
-
+		
 			_context.Books.Add(book);
 			await _context.SaveChangesAsync();
 			return book;
@@ -55,6 +59,19 @@ namespace ManageBooks.Repositories
 			return book;
 		}
 
-		
+		public async Task<Book> UpdateBookQuantityAfterCheckout(Book book)
+		{
+			_context.Update(book);
+			book.AvailableCopies -= 1;
+			await _context.SaveChangesAsync();
+			return book;
+		}
+		public async Task<Book> UpdateBookQuantityAfterReturn(Book book)
+		{
+			_context.Update(book);
+			book.AvailableCopies += 1;
+			await _context.SaveChangesAsync();
+			return book;
+		}
 	}
 }

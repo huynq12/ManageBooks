@@ -49,12 +49,14 @@ namespace ManageBooks.Controllers
 		public async Task<IActionResult> UpdateCategory(int id,Category category)
 		{
 			var existingCategory = await _categoryRepository.GetCategoryById(id);
+
 			if (existingCategory == null)
 			{
 				return NotFound();
 			}
 			existingCategory.CategoryName = category.CategoryName;
 			existingCategory.Description = category.Description;
+
 			var updatedCategory = await _categoryRepository.UpdateCategory(existingCategory);
 			return Ok(updatedCategory);
 		}

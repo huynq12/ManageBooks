@@ -16,7 +16,6 @@ namespace ManageBooks.Models
 		public string? Description { get; set; }
 		public int? CategoryId { get; set; }
 		[ForeignKey("CategoryId")]
-		[JsonIgnore]
 		public virtual Category Category { get; set; }
 	}
 }

@@ -1,7 +1,11 @@
-﻿using ManageBooks.Interfaces;
+﻿using AutoMapper;
+using Azure.Core;
+using ManageBooks.Dtos;
+using ManageBooks.Interfaces;
 using ManageBooks.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Enum;
 
 namespace ManageBooks.Controllers
 {
@@ -11,9 +15,10 @@ namespace ManageBooks.Controllers
 	public class BookController : ControllerBase
 	{
 		private readonly IBookRepository _bookRepository;
-
-		public BookController(IBookRepository bookRepository) {
+		private readonly IMapper _mapper;
+		public BookController(IBookRepository bookRepository, IMapper mapper) {
 			_bookRepository = bookRepository;
+			_mapper = mapper;
 		}
 
 
@@ -58,36 +63,44 @@ namespace ManageBooks.Controllers
 		}
 
 		[HttpPost("create")] 
-		public async Task<IActionResult> CreateBook(Book book)
+		public async Task<IActionResult> CreateBook([FromBody] BookDto bookDto)
 		{
-			if(!ModelState.IsValid)
+
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
+			var book = await _bookRepository.CreateBook(new Book()
 			{
-				return BadRequest();
-			}
-			if(book.AvailableCopies > book.TotalCopies)
-			{
-				return BadRequest();
-			}
-			var result = await _bookRepository.CreateBook(book);
-			return Ok(result);
+				Title = bookDto.Title,
+				Author = bookDto.Author,
+				TotalCopies= bookDto.TotalCopies,
+				AvailableCopies = bookDto.AvailableCopies,
+				Publisher = bookDto.Publisher,
+				Description = bookDto.Description,
+				CategoryId = bookDto.CategoryId
+			});
+
+			return CreatedAtAction(nameof(GetBookById), new { id = book.BookId }, book);
 
 		}
 
 		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateBook(int id,[FromBody]Book book) {
+		public async Task<IActionResult> UpdateBook(int id,[FromBody]BookDto bookDto) {
 		
 			var existingBook = await _bookRepository.GetBookById(id);
 			if(existingBook == null)
 			{
 				return NotFound();
 			}
-			existingBook.Title = book.Title;
-			existingBook.Author = book.Author;
-			existingBook.AvailableCopies= book.AvailableCopies;
-			existingBook.TotalCopies= book.TotalCopies;
-			existingBook.Publisher = book.Publisher;
-			existingBook.CategoryId = book.CategoryId;
-			existingBook.Description = book.Description;
+
+			existingBook.Title = bookDto.Title;
+			existingBook.Author = bookDto.Author;
+			existingBook.AvailableCopies= bookDto.AvailableCopies;
+			existingBook.TotalCopies= bookDto.TotalCopies;
+			existingBook.Publisher = bookDto.Publisher;
+			existingBook.CategoryId = bookDto.CategoryId;
+			existingBook.Description = bookDto.Description;
+
 			var updatedBook = await _bookRepository.UpdateBook(existingBook);	
 			return Ok(updatedBook);
 
