@@ -52,6 +52,15 @@ namespace ManageBooks.Repositories
 			return await _context.Books.ToListAsync();
 		}
 
+		public async Task<List<Book>> GetBooksByText(string text)
+		{
+			text = text.ToLower();
+			return await _context.Books.Where(x=>x.Title.ToLower().Contains(text)
+												|| x.Author.ToLower().Contains(text)
+												|| x.Publisher.ToLower().Contains(text)
+												|| x.Description.ToLower().Contains(text)).ToListAsync();
+		}
+
 		public async Task<Book> UpdateBook(Book book)
 		{
 			_context.Update(book);

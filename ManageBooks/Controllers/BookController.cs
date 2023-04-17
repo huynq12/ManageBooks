@@ -61,6 +61,14 @@ namespace ManageBooks.Controllers
 			}
 			return Ok(result);
 		}
+
+		[HttpGet("searchList/{text}")]
+		public async Task<IActionResult> GetBooksByText(string text)
+		{
+			var list = await _bookRepository.GetBooksByText(text);
+			return Ok(list);
+		}
+
 		//tạo sách trên hệ thống
 		[HttpPost("create")] 
 		public async Task<IActionResult> CreateBook([FromBody] BookDto bookDto)

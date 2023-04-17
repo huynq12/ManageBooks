@@ -138,8 +138,5 @@ namespace ManageBooks.Controllers
 			var deletedOrder = await _orderRepository.DeleteOrder(existingOrder);
 			return Ok(deletedOrder);
 		}
-
-
-
 	}
 }
