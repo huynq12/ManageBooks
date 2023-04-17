@@ -12,6 +12,7 @@ namespace ManageBooks.Interfaces
         Task<List<Book>> GetBooksByText(string text);
         Task<Book> CreateBook(Book book);
         Task<Book> UpdateBook(Book book);
+        
         Task<Book> UpdateBookQuantityAfterCheckout(Book book);
         Task<Book> UpdateBookQuantityAfterReturn(Book book);
 		Task<Book> DeleteBook(Book book);

@@ -32,13 +32,20 @@ namespace ManageBooks.Controllers
 			return Ok(result);
 		}
 		//lấy danh sách các bạn đọc đang mượn sách
-		[HttpGet("orderingCustomer")]
+		[HttpGet("ordering-customer")]
 		public async Task<IActionResult> GetOrderingCustomers()
 		{
 			var result = await _customerRepository.GetOrderingCustomers();
 			return Ok(result);
 		}
-		
+
+		[HttpGet("expired-customer")]
+		public async Task<IActionResult> GetExpiredCustomers()
+		{
+			var result = await _customerRepository.GetExpiredCustomers();
+			return Ok(result);
+		}
+
 		[HttpPost]
 		public async Task<IActionResult> CreateCustomer([FromBody]Customer customer)
 		{

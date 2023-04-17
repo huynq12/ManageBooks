@@ -1,4 +1,5 @@
 using AutoMapper;
+using ManageBooks;
 using ManageBooks.Data;
 using ManageBooks.Helper;
 using ManageBooks.Interfaces;
@@ -27,7 +28,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+//builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 builder.Services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });

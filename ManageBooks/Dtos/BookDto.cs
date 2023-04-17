@@ -8,6 +8,6 @@
 		public int AvailableCopies { get; set; }
 		public string Publisher { get; set; }
 		public string? Description { get; set; }
-		public int CategoryId { get; set; }
+		public string Genre { get; set; }
 	}
 }

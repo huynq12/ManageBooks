@@ -30,14 +30,14 @@ namespace ManageBooks.Controllers
 			return Ok(result);
 		}
 		//lấy ra danh sách các đơn đang mượn
-		[HttpGet("activeOrder")]
+		[HttpGet("active-order")]
 		public async Task<IActionResult> GetActiveOrders()
 		{
 			var result = await _orderRepository.GetActiveOrders();
 			return Ok(result);
 		}
 		//lấy ra danh sách các đơn quá hạn để thông báo nhắc nhở bạn đọc
-		[HttpGet("expiredOrders")]
+		[HttpGet("expired-orders")]
 		public async Task<IActionResult> GetExpiredOrders()
 		{
 			var result = await _orderRepository.GetExpiredOrders();

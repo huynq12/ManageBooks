@@ -68,6 +68,8 @@ namespace ManageBooks.Repositories
 			return book;
 		}
 
+		
+
 		public async Task<Book> UpdateBookQuantityAfterCheckout(Book book)
 		{
 			_context.Update(book);

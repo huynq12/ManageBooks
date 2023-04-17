@@ -30,6 +30,12 @@ namespace ManageBooks.Repositories
 			return await _context.Customers.OrderBy(x=>x.CustomerName).ToListAsync();
 		}
 
+		public async Task<List<Customer>> GetExpiredCustomers()
+		{
+			return await _context.Customers.Where(x => x.OrderingStatus == Shared.Enum.Status.Expired).ToListAsync();
+
+		}
+
 		public async Task<List<Customer>> GetOrderingCustomers()
 		{
 			return await _context.Customers.Where(x=>x.OrderingStatus == Shared.Enum.Status.Active).ToListAsync();

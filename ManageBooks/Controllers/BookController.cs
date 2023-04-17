@@ -85,7 +85,7 @@ namespace ManageBooks.Controllers
 				AvailableCopies = bookDto.AvailableCopies,
 				Publisher = bookDto.Publisher,
 				Description = bookDto.Description,
-				CategoryId = bookDto.CategoryId
+				Genre = bookDto.Genre
 			});
 
 			return CreatedAtAction(nameof(GetBookById), new { id = book.BookId }, book);
@@ -106,10 +106,27 @@ namespace ManageBooks.Controllers
 			existingBook.AvailableCopies= bookDto.AvailableCopies;
 			existingBook.TotalCopies= bookDto.TotalCopies;
 			existingBook.Publisher = bookDto.Publisher;
-			existingBook.CategoryId = bookDto.CategoryId;
+			existingBook.Genre = bookDto.Genre;
 			existingBook.Description = bookDto.Description;
 
 			var updatedBook = await _bookRepository.UpdateBook(existingBook);	
+			return Ok(updatedBook);
+
+		}
+		[HttpPut("/genre&des{id}")]
+		public async Task<IActionResult> UpdateBookGenreAndDescription(int id, [FromBody] BookDto bookDto)
+		{
+
+			var existingBook = await _bookRepository.GetBookById(id);
+			if (existingBook == null)
+			{
+				return NotFound();
+			}
+
+			existingBook.Genre = bookDto.Genre;
+			existingBook.Description = bookDto.Description;
+
+			var updatedBook = await _bookRepository.UpdateBook(existingBook);
 			return Ok(updatedBook);
 
 		}
