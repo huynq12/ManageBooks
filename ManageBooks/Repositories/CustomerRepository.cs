@@ -15,7 +15,7 @@ namespace ManageBooks.Repositories
 		public async Task<Customer> CreateCustomer(Customer customer)
 		{
 			_context.Customers.Add(customer);
-			customer.OrderingStatus = Shared.Enum.Status.Active;
+			customer.Status = Shared.Enum.CustomerStatus.Active;
 			await _context.SaveChangesAsync();	
 			return customer;
 		}
@@ -32,13 +32,13 @@ namespace ManageBooks.Repositories
 
 		public async Task<List<Customer>> GetExpiredCustomers()
 		{
-			return await _context.Customers.Where(x => x.OrderingStatus == Shared.Enum.Status.Expired).ToListAsync();
+			return await _context.Customers.Where(x => x.Status == Shared.Enum.CustomerStatus.Expired).ToListAsync();
 
 		}
 
 		public async Task<List<Customer>> GetOrderingCustomers()
 		{
-			return await _context.Customers.Where(x=>x.OrderingStatus == Shared.Enum.Status.Active).ToListAsync();
+			return await _context.Customers.Where(x=>x.Status	 == Shared.Enum.CustomerStatus.Active).ToListAsync();
 		}
 
 		public async Task<Customer> UpdateCustomer(Customer customer)

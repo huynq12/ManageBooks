@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Shared.Enum
 {
-	public enum Status
+	public enum OrderStatus
 	{
-		None,
+		
 		Active,
 		Returned,
 		Expired

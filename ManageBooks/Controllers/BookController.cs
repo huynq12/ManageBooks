@@ -6,6 +6,7 @@ using ManageBooks.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Enum;
+using System.Text.RegularExpressions;
 
 namespace ManageBooks.Controllers
 {
@@ -28,6 +29,7 @@ namespace ManageBooks.Controllers
 			var result = await _bookRepository.GetBooks();
 			return Ok(result);
 		}
+
 		//tìm sách theo id
 		[HttpGet("id/{id}")]
 		public async Task<IActionResult> GetBookById(int id)
@@ -38,6 +40,19 @@ namespace ManageBooks.Controllers
 				return NotFound();
 			}
 			return Ok(result);
+		}
+
+		[HttpGet("books/{genre}")]
+		public async Task<IActionResult> GetBooksByGenre(string genre)
+		{
+			var list = await _bookRepository.GetBooksByGenre(genre);
+			return Ok(list);	
+		}
+		[HttpGet("favorite-list")]
+		public async Task<IActionResult> GetFavBooks()
+		{
+			var list = await _bookRepository.GetFavBooks();
+			return Ok(list);	
 		}
 		//tìm sách theo tên
 		[HttpGet("title/{title}")]
@@ -62,16 +77,17 @@ namespace ManageBooks.Controllers
 			return Ok(result);
 		}
 
-		[HttpGet("searchList/{text}")]
+		[HttpGet("search-list/{text}")]
 		public async Task<IActionResult> GetBooksByText(string text)
 		{
 			var list = await _bookRepository.GetBooksByText(text);
 			return Ok(list);
 		}
 
+		
 		//tạo sách trên hệ thống
 		[HttpPost("create")] 
-		public async Task<IActionResult> CreateBook([FromBody] BookDto bookDto)
+		public async Task<IActionResult> CreateBook([FromBody] CreateBookRequest request)
 		{
 
 			if (!ModelState.IsValid)
@@ -79,13 +95,15 @@ namespace ManageBooks.Controllers
 
 			var book = await _bookRepository.CreateBook(new Book()
 			{
-				Title = bookDto.Title,
-				Author = bookDto.Author,
-				TotalCopies= bookDto.TotalCopies,
-				AvailableCopies = bookDto.AvailableCopies,
-				Publisher = bookDto.Publisher,
-				Description = bookDto.Description,
-				Genre = bookDto.Genre
+				Title = request.Title,
+				Author = request.Author,
+				TotalCopies= request.TotalCopies,
+				AvailableCopies = request.AvailableCopies,
+				Publisher = request.Publisher,
+				Description = request.Description,
+				Genre = request.Genre,
+				OrderCount = 0
+			
 			});
 
 			return CreatedAtAction(nameof(GetBookById), new { id = book.BookId }, book);
@@ -93,7 +111,7 @@ namespace ManageBooks.Controllers
 		}
 		//chỉnh sửa thông tin sách
 		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateBook(int id,[FromBody]BookDto bookDto) {
+		public async Task<IActionResult> UpdateBook(int id,[FromBody]CreateBookRequest  bookDto) {
 		
 			var existingBook = await _bookRepository.GetBookById(id);
 			if(existingBook == null)
@@ -108,13 +126,14 @@ namespace ManageBooks.Controllers
 			existingBook.Publisher = bookDto.Publisher;
 			existingBook.Genre = bookDto.Genre;
 			existingBook.Description = bookDto.Description;
+			existingBook.OrderCount = bookDto.OrderCount;
 
 			var updatedBook = await _bookRepository.UpdateBook(existingBook);	
 			return Ok(updatedBook);
 
 		}
-		[HttpPut("/genre&des{id}")]
-		public async Task<IActionResult> UpdateBookGenreAndDescription(int id, [FromBody] BookDto bookDto)
+		/*[HttpPut("/info/{id}")]
+		public async Task<IActionResult> UpdateBookInfor(int id)
 		{
 
 			var existingBook = await _bookRepository.GetBookById(id);
@@ -123,13 +142,12 @@ namespace ManageBooks.Controllers
 				return NotFound();
 			}
 
-			existingBook.Genre = bookDto.Genre;
-			existingBook.Description = bookDto.Description;
+			//existingBook.OrderCount = existingBook.TotalCopies - existingBook.AvailableCopies;
 
 			var updatedBook = await _bookRepository.UpdateBook(existingBook);
 			return Ok(updatedBook);
 
-		}
+		}*/
 		//xoá sách
 		[HttpDelete("delete/{id}")]
 		public async Task<IActionResult> DeleteBook(int id)

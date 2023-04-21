@@ -4,6 +4,7 @@ using ManageBooks.Dtos;
 using ManageBooks.Interfaces;
 using ManageBooks.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 
 namespace ManageBooks.Repositories
 {
@@ -19,10 +20,9 @@ namespace ManageBooks.Repositories
 		}
 		public async Task<Book> CreateBook(Book book)
 		{
-		
 			_context.Books.Add(book);
 			await _context.SaveChangesAsync();
-			return book;
+			return book ;
 		}
 
 		public async Task<Book> DeleteBook(Book book)
@@ -52,6 +52,11 @@ namespace ManageBooks.Repositories
 			return await _context.Books.ToListAsync();
 		}
 
+		public async Task<List<Book>> GetBooksByGenre(string genre)
+		{
+			return await _context.Books.Where(x => x.Genre.ToLower().Contains(genre.ToLower())).ToListAsync();
+		}
+
 		public async Task<List<Book>> GetBooksByText(string text)
 		{
 			text = text.ToLower();
@@ -59,6 +64,11 @@ namespace ManageBooks.Repositories
 												|| x.Author.ToLower().Contains(text)
 												|| x.Publisher.ToLower().Contains(text)
 												|| x.Description.ToLower().Contains(text)).ToListAsync();
+		}
+
+		public async Task<List<Book>> GetFavBooks()
+		{
+			return await _context.Books.OrderByDescending(x => x.OrderCount).ToListAsync();
 		}
 
 		public async Task<Book> UpdateBook(Book book)
@@ -70,10 +80,11 @@ namespace ManageBooks.Repositories
 
 		
 
-		public async Task<Book> UpdateBookQuantityAfterCheckout(Book book)
+		public async Task<Book> UpdateBookAfterCheckout(Book book)
 		{
 			_context.Update(book);
 			book.AvailableCopies -= 1;
+			book.OrderCount += 1;
 			await _context.SaveChangesAsync();
 			return book;
 		}

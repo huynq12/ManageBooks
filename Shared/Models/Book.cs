@@ -16,6 +16,7 @@ namespace ManageBooks.Models
 		public int AvailableCopies { get; set; }
 		public string Genre { get; set; }
 		public string Publisher { get; set; }
+		public int OrderCount { get; set; }
 		public string? Description { get; set; }
 		
 		

@@ -2,7 +2,7 @@
 
 namespace ManageBooks.Dtos
 {
-	public class OrderDto
+	public class CreateOrderRequest
 	{
 		public int BookId { get; set; }
 		public int CustomerId { get; set; }

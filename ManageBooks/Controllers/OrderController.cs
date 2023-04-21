@@ -56,7 +56,7 @@ namespace ManageBooks.Controllers
 		}
 		//khởi tạo đơn mượn sách
 		[HttpPost]
-		public async Task<ActionResult> CreateOrder([FromBody] OrderDto orderDto)
+		public async Task<ActionResult> CreateOrder([FromBody] CreateOrderRequest orderDto)
 		{
 			var book = await _bookRepository.GetBookById(orderDto.BookId);
 
@@ -70,9 +70,9 @@ namespace ManageBooks.Controllers
 				return BadRequest("The book is not available for borrowing");
 			}
 			var orderingCustomer = _customerRepository.GetCustomerById(orderDto.CustomerId);
-			if (orderingCustomer == null)
+			if (orderingCustomer == null || orderingCustomer.Status == Shared.Enum.CustomerStatus.Active)
 			{
-				return NotFound("The customer does nto exist.");
+				return NotFound("The customer does not exist or not be permit");
 			}
 
 			var newOrder = await _orderRepository.CreateOrder(new Order()
@@ -81,22 +81,22 @@ namespace ManageBooks.Controllers
 				BookId = orderDto.BookId,
 				CheckedOut = DateTime.Now,
 				Returned = DateTime.Now.AddDays(14),
-				Status = Shared.Enum.Status.Active
+				Status = Shared.Enum.OrderStatus.Active
 			});
 
 			//update customer status
-			orderingCustomer.OrderingStatus = Shared.Enum.Status.Active;
+			orderingCustomer.Status = Shared.Enum.CustomerStatus.Active;
 			await _customerRepository.UpdateCustomer(orderingCustomer);
 
 			//update book quantity after customer return book
-			await _bookRepository.UpdateBookQuantityAfterCheckout(book);
+			await _bookRepository.UpdateBookAfterCheckout(book);
 			
 			return CreatedAtAction(nameof(GetOrderById), new { id = newOrder.OrderId }, newOrder);
 
 		}
 		//update trạng thái đơn mượn
 		[HttpPut("{id}")]
-		public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] Order order)
+		public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] UpdateStatusOrderRequest request)
 		{
 			var existingOrder = await _orderRepository.GetOrderById(id);
 
@@ -110,16 +110,14 @@ namespace ManageBooks.Controllers
 			var customer = _customerRepository.GetCustomerById(existingOrder.CustomerId);
 
 			//update status
-			existingOrder.Status = order.Status;
+			existingOrder.Status = request.Status;
 			//check status to update quantity
-			if(existingOrder.Status== Shared.Enum.Status.Returned)
+			if(existingOrder.Status== Shared.Enum.OrderStatus.Returned)
 			{
 				await _bookRepository.UpdateBookQuantityAfterReturn(bookToUpdate);
-				customer.OrderingStatus = Shared.Enum.Status.Returned;
+				customer.Status = Shared.Enum.CustomerStatus.None;
 				await _customerRepository.UpdateCustomer(customer);
-
 			}
-
 			var updatedOrder = await _orderRepository.UpdateOrderStatus(existingOrder);
 			return Ok(updatedOrder);
 

@@ -33,12 +33,12 @@ namespace ManageBooks.Repositories
 
 		public async Task<List<Order>> GetActiveOrders()
 		{
-			return await _context.Orders.Where(x => x.Status == Shared.Enum.Status.Active).ToListAsync();
+			return await _context.Orders.Where(x => x.Status == Shared.Enum.OrderStatus.Active).ToListAsync();
 		}
 
 		public async Task<List<Order>> GetExpiredOrders()
 		{
-			return await _context.Orders.Where(x=>x.Status==Shared.Enum.Status.Expired).ToListAsync();
+			return await _context.Orders.Where(x=>x.Status==Shared.Enum.OrderStatus.Expired).ToListAsync();
 		}
 
 		public async Task<Order?> GetOrderById(int id)
@@ -56,7 +56,7 @@ namespace ManageBooks.Repositories
 			_context.Orders.Update(order);
 			if(DateTime.Now > order.Returned)
 			{
-				order.Status = Shared.Enum.Status.Expired;
+				order.Status = Shared.Enum.OrderStatus.Expired;
 			}
 			await _context.SaveChangesAsync();
 			return order;
