@@ -71,6 +71,11 @@ namespace ManageBooks.Repositories
 			return await _context.Books.OrderByDescending(x => x.OrderCount).ToListAsync();
 		}
 
+		public async Task<List<Book>> GetNewBooks()
+		{
+			return await _context.Books.OrderByDescending(x => x.Release).ToListAsync();
+		}
+
 		public async Task<Book> UpdateBook(Book book)
 		{
 			_context.Update(book);

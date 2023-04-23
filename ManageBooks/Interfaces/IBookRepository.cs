@@ -8,6 +8,7 @@ namespace ManageBooks.Interfaces
         Task<List<Book>> GetBooks();
         Task<List<Book>> GetBooksByGenre(string genre);
         Task<List<Book>> GetFavBooks();
+        Task<List<Book>> GetNewBooks(); 
         Task<Book> GetBookById(int id);
         Task<Book?> GetBookByTitle(string title);
         Task<Book?> GetBookByAuthor(string author);

@@ -17,6 +17,7 @@
 			<th>Thể loại</th>
 			<th>Tổng số bản in</th>
 			<th>Số bản có sẵn</th>
+			<th>Số lượt đặt mượn</th>
 			<th>Mô tả</th>
 		</tr>
 	</thead>
@@ -31,12 +32,18 @@
 				<td>@book.Genre</td>
 				<td>@book.TotalCopies</td>
 				<td>@book.AvailableCopies</td>
+				<td>@book.OrderCount</td>
 				<td>@book.Description</td>
-				<button class="btn btn-primary" @onclick="(()=>EditHandle(book.BookId))">
-					<i class="oi oi-pencil"></i>
+				<td>
+					<button class="btn btn-primary" @onclick="(()=>EditHandle(book.BookId))">
+						<i class="oi oi-pencil"></i>
 				</button>
+				</td>
 			</tr>
 		}
+
+		<button class="btn btn-success" @onclick="CreateBook" >Thêm sách</button>
+		
 	</tbody>
 </table>
 
@@ -48,5 +55,9 @@
 	void EditHandle(int id)
 	{
 		NavigationManager.NavigateTo($"/book/{id}");
+	}
+	void CreateBook()
+	{
+		NavigationManager.NavigateTo("/book");
 	}
 }

@@ -15,9 +15,9 @@ namespace LibraryManager.Services
 		}
 		public List<Book> Books { get ; set ; } = new List<Book>();
 
-		public Task CreateBook(Book book)
+		public async Task CreateBook(Book book)
 		{
-			throw new NotImplementedException();
+			await _httpClient.PostAsJsonAsync("/api/Book/create", book);
 		}
 
 		public Task DeleteBook(int id)
@@ -57,7 +57,6 @@ namespace LibraryManager.Services
 		public async Task UpdateBook(int id, Book book)
 		{
 			await _httpClient.PutAsJsonAsync($"/api/Book/{id}",book);
-
 		}
 	}
 }

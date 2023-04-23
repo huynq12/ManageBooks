@@ -10,5 +10,6 @@
 		public string? Description { get; set; }
 		public string Genre { get; set; }
 		public int OrderCount { get; set; }
+		public DateTime Release { get; set; }
 	}
 }

@@ -41,7 +41,11 @@
 		<span>Số bản in có sẵn</span>
 		<InputNumber id="availableCopies" class="form-control" @bind-Value="@book.AvailableCopies"></InputNumber>
 	</div>
-	<button class="btn btn-primary">Sửa</button>
+	<div>
+		<span>Mô tả</span>
+		<InputText id="description" class="form-control" @bind-Value="@book.Description"></InputText>
+	</div>
+	<button class="btn btn-primary">Submit</button>
 </EditForm>
 @code {
 	[Parameter]
@@ -70,6 +74,11 @@
 		if(Id != null)
 		{
 			await BookService.UpdateBook((int)Id, book);
+			NavigationManager.NavigateTo("/books");
+		}
+		else
+		{
+			await BookService.CreateBook(book);
 			NavigationManager.NavigateTo("/books");
 		}
 	}

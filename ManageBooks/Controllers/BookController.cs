@@ -54,6 +54,12 @@ namespace ManageBooks.Controllers
 			var list = await _bookRepository.GetFavBooks();
 			return Ok(list);	
 		}
+		[HttpGet("new-books")]
+		public async Task<IActionResult> GetNewBooks()
+		{
+			var list = await _bookRepository.GetNewBooks();
+			return Ok(list);
+		}
 		//tìm sách theo tên
 		[HttpGet("title/{title}")]
 		public async Task<IActionResult> GetBookByTitle(string title)
@@ -102,8 +108,8 @@ namespace ManageBooks.Controllers
 				Publisher = request.Publisher,
 				Description = request.Description,
 				Genre = request.Genre,
-				OrderCount = 0
-			
+				OrderCount = 0,
+				Release = DateTime.Now
 			});
 
 			return CreatedAtAction(nameof(GetBookById), new { id = book.BookId }, book);
@@ -127,13 +133,14 @@ namespace ManageBooks.Controllers
 			existingBook.Genre = bookDto.Genre;
 			existingBook.Description = bookDto.Description;
 			existingBook.OrderCount = bookDto.OrderCount;
+			existingBook.Release = bookDto.Release;
 
 			var updatedBook = await _bookRepository.UpdateBook(existingBook);	
 			return Ok(updatedBook);
 
 		}
-		/*[HttpPut("/info/{id}")]
-		public async Task<IActionResult> UpdateBookInfor(int id)
+		[HttpPut("/info/{id}")]
+		public async Task<IActionResult> UpdateBookInfor(int id,CreateBookRequest bookDto)
 		{
 
 			var existingBook = await _bookRepository.GetBookById(id);
@@ -142,12 +149,12 @@ namespace ManageBooks.Controllers
 				return NotFound();
 			}
 
-			//existingBook.OrderCount = existingBook.TotalCopies - existingBook.AvailableCopies;
+			existingBook.Release = bookDto.Release;
 
 			var updatedBook = await _bookRepository.UpdateBook(existingBook);
 			return Ok(updatedBook);
 
-		}*/
+		}
 		//xoá sách
 		[HttpDelete("delete/{id}")]
 		public async Task<IActionResult> DeleteBook(int id)
