@@ -1,6 +1,9 @@
+using Blazored.LocalStorage;
+using LibraryManager;
 using LibraryManager.Data;
 using LibraryManager.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +14,12 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.AddScoped<IBookService, BookService>();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+
+builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddAuthenticationCore();
 
 builder.Services.AddScoped(sp => new HttpClient
 {
