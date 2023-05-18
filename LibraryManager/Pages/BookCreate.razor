@@ -1,0 +1,68 @@
+﻿@page "/bookCreate"
+@using Blazored.Toast.Services;
+@using ManageBooks.Dtos;
+@using ManageBooks.Models
+@using LibraryManager.Services;
+
+@inject IBookService BookService;
+@inject NavigationManager NavigationManager;
+@inject IToastService ToastService
+
+<h3>TaskCreate</h3>
+
+<EditForm Model="request" OnValidSubmit="Submit">
+    <DataAnnotationsValidator/>
+	<div>
+		<span>Tiêu đề</span>
+		<InputText id="title" class="form-control" @bind-Value="@request.Title"></InputText>
+		<ValidationMessage For="()=>request.Title"></ValidationMessage>
+	</div>
+	<div>
+		<span>Tác giả</span>
+		<InputText id="author" class="form-control" @bind-Value="@request.Author"></InputText>
+		<ValidationMessage For="()=>request.Author"></ValidationMessage>
+
+	</div>
+	<div>
+		<span>Nhà xuất bản</span>
+		<InputText id="publisher" class="form-control" @bind-Value="@request.Publisher"></InputText>
+	</div>
+	<div>
+		<span>Thể loại</span>
+		<InputText id="genre" class="form-control" @bind-Value="@request.Genre"></InputText>
+		<ValidationMessage For="()=>request.Genre"></ValidationMessage>
+
+	</div>
+	<div>
+		<span>Tổng số bản in</span>
+		<InputNumber id="totalCopies" class="form-control" @bind-Value="@request.TotalCopies"></InputNumber>
+	</div>
+	<div>
+		<span>Số bản in có sẵn</span>
+		<InputNumber id="availableCopies" class="form-control" @bind-Value="@request.AvailableCopies"></InputNumber>
+	</div>
+	<div>
+		<span>Mô tả</span>
+		<InputText id="description" class="form-control" @bind-Value="@request.Description"></InputText>
+	</div>
+	<button class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+    private CreateBookRequest request = new CreateBookRequest();
+
+    private async Task Submit(EditContext context)
+    {
+        var result = await BookService.CreateBook(request);
+        if (result)
+        {
+            ToastService.ShowSuccess($"{request.Title} has been created successfully.");
+            NavigationManager.NavigateTo("/listBooks");
+        }
+        else
+        {
+            ToastService.ShowError($"An error occurred in progress. Please contact to administrator.");
+
+        }
+    }
+}

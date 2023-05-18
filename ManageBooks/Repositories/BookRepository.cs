@@ -47,9 +47,20 @@ namespace ManageBooks.Repositories
 			return _context.Books.FirstOrDefaultAsync(book => book.Title.ToLower().Contains(title.ToLower()));
 		}
 
-		public async Task<List<Book>> GetBooks()
+		public async Task<List<Book>> GetBooks(BookListSearch bookListSearch)
 		{
-			return await _context.Books.ToListAsync();
+			var query = _context.Books.AsQueryable();
+
+			if (!string.IsNullOrEmpty(bookListSearch.Title))
+				query = query.Where(x => x.Title.Contains(bookListSearch.Title));
+
+			if (!string.IsNullOrEmpty(bookListSearch.Author))
+				query = query.Where(x => x.Author.Contains(bookListSearch.Author));
+
+			if (!string.IsNullOrEmpty(bookListSearch.Genre))
+				query = query.Where(x => x.Genre.Contains(bookListSearch.Genre));
+
+			return await query.ToListAsync(); 
 		}
 
 		public async Task<List<Book>> GetBooksByGenre(string genre)

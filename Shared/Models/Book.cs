@@ -10,10 +10,13 @@ namespace ManageBooks.Models
 	{
 		[Key]
 		public int BookId { get; set; }
+		[Required]
 		public string Title { get; set; }
+		[Required]
 		public string Author { get; set; }
 		public int TotalCopies { get; set; }
 		public int AvailableCopies { get; set; }
+		[Required]
 		public string Genre { get; set; }
 		public string Publisher { get; set; }
 		public int OrderCount { get; set; }

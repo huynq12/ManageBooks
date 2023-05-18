@@ -24,9 +24,9 @@ namespace ManageBooks.Controllers
 
 		//in ra danh sách các cuốn sách của thư viện
 		[HttpGet]
-		public async Task<IActionResult> GetBooks()
+		public async Task<IActionResult> GetBooks([FromQuery] BookListSearch bookListSearch)
 		{
-			var result = await _bookRepository.GetBooks();
+			var result = await _bookRepository.GetBooks(bookListSearch);
 			return Ok(result);
 		}
 
@@ -103,16 +103,21 @@ namespace ManageBooks.Controllers
 			{
 				Title = request.Title,
 				Author = request.Author,
-				TotalCopies= request.TotalCopies,
+				TotalCopies = request.TotalCopies,
 				AvailableCopies = request.AvailableCopies,
 				Publisher = request.Publisher,
 				Description = request.Description,
 				Genre = request.Genre,
-				OrderCount = 0,
+				OrderCount = request.TotalCopies - request.AvailableCopies,
 				Release = DateTime.Now
 			});
 
-			return CreatedAtAction(nameof(GetBookById), new { id = book.BookId }, book);
+			if(book.AvailableCopies > book.TotalCopies || book.TotalCopies < 1 || book.AvailableCopies < 1)
+			{
+				return BadRequest();
+			}
+			else 
+				return CreatedAtAction(nameof(GetBookById), new { id = book.BookId }, book);
 
 		}
 		//chỉnh sửa thông tin sách

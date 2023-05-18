@@ -1,7 +1,16 @@
 ﻿@inherits LayoutComponentBase
+@using Blazored.Toast.Configuration;
 
 <PageTitle>LibraryManager</PageTitle>
 
+<BlazoredToasts 
+    Position="ToastPosition.BottomRight" 
+    Timeout="5" 
+    IconType="IconType.FontAwesome" 
+    ErrorIcon="fa fa-times"
+    InfoIcon="fa fa-info" 
+    SuccessIcon="fa fa-check" 
+    WarningIcon="fa fa-exclamation" />
 <div class="page">
     <div class="sidebar">
         <NavMenu />

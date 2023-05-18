@@ -1,0 +1,37 @@
+﻿@using ManageBooks.Dtos;
+<div class="row">
+			<EditForm Model="@listSearch" OnSubmit="@SearchForm">
+				<div class="row">
+					<div class="col">
+						<label>Tiêu đề sách</label>
+						<InputText class="form-control" @bind-Value="listSearch.Title"></InputText>
+					</div>
+					<div class="col">
+						<label>Tác giả</label>
+						<InputText class="form-control" @bind-Value="listSearch.Author"></InputText>
+					</div>
+					<div class="col">
+						<label>Thể loại</label>
+						<InputText class="form-control" @bind-Value="listSearch.Genre"></InputText>
+					</div>
+					<div class="col">
+						<button type="submit" class="btn btn-primary">Search</button>
+					</div>
+
+				</div>
+
+			</EditForm>
+	</div>
+@code {
+	private BookListSearch listSearch = new BookListSearch();
+
+	[Parameter]
+	public EventCallback<BookListSearch> OnSearch { set; get; }
+
+	private async Task SearchForm(EditContext context)
+	{
+		await OnSearch.InvokeAsync(listSearch);
+
+	}
+
+}

@@ -1,56 +1,70 @@
-﻿@page "/books"
+﻿@page "/listBooks"
 @using LibraryManager.Services;
+@using LibraryManager.Components;
+@using ManageBooks.Dtos;
+
 @inject IBookService BookService
 @inject NavigationManager NavigationManager
 
 @if(BookService.Books == null)
 {
-	<div>Loading</div>
+	<LoadingIndicator></LoadingIndicator>
 }
-<table class="table">
-	<thead>
-		<tr>
-			<th>Mã sách</th>
-			<th>Tiêu đề</th>
-			<th>Tác giả</th>
-			<th>Nhà xuất bản</th>
-			<th>Thể loại</th>
-			<th>Tổng số bản in</th>
-			<th>Số bản có sẵn</th>
-			<th>Số lượt đặt mượn</th>
-			<th>Mô tả</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach(var book in BookService.Books)
-		{
-			<tr>
-				<td>@book.BookId</td>
-				<td>@book.Title</td>
-				<td>@book.Author</td>
-				<td>@book.Publisher</td>
-				<td>@book.Genre</td>
-				<td>@book.TotalCopies</td>
-				<td>@book.AvailableCopies</td>
-				<td>@book.OrderCount</td>
-				<td>@book.Description</td>
-				<td>
-					<button class="btn btn-primary" @onclick="(()=>EditHandle(book.BookId))">
-						<i class="oi oi-pencil"></i>
-				</button>
-				</td>
-			</tr>
-		}
+else
+{
+	<div class="row mt-4">
+		<SearchListBook OnSearch="SearchBook"></SearchListBook>
+	</div>
+	<div class="row mt-2">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Mã sách</th>
+					<th>Tiêu đề</th>
+					<th>Tác giả</th>
+					<th>Nhà xuất bản</th>
+					<th>Thể loại</th>
+					<th>Tổng số bản in</th>
+					<th>Số bản có sẵn</th>
+					<th>Số lượt đặt mượn</th>
+					<th>Mô tả</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var book in BookService.Books)
+				{
+					<tr>
+						<td>@book.BookId</td>
+						<td>@book.Title</td>
+						<td>@book.Author</td>
+						<td>@book.Publisher</td>
+						<td>@book.Genre</td>
+						<td>@book.TotalCopies</td>
+						<td>@book.AvailableCopies</td>
+						<td>@book.OrderCount</td>
+						<td>@book.Description</td>
+						<td>
+							<button class="btn btn-primary" @onclick="(()=>EditHandle(book.BookId))">
+								<i class="oi oi-pencil"></i>
+							</button>
+						</td>
+					</tr>
+				}
 
-		<button class="btn btn-success" @onclick="CreateBook" >Thêm sách</button>
-		
-	</tbody>
-</table>
+				<button class="btn btn-success" @onclick="CreateBook">Thêm sách</button>
+
+			</tbody>
+		</table>
+	</div>
+
+}
 
 @code {
+	private BookListSearch listSearch = new BookListSearch();
+
 	protected override async Task OnInitializedAsync()
 	{
-		await BookService.GetBooks();
+		await BookService.GetBooks(listSearch);
 	}
 	void EditHandle(int id)
 	{
@@ -58,6 +72,12 @@
 	}
 	void CreateBook()
 	{
-		NavigationManager.NavigateTo("/book");
+		NavigationManager.NavigateTo("/bookCreate");
 	}
+	private async Task SearchBook (BookListSearch bookListSearch)
+	{
+		listSearch = bookListSearch;
+		await BookService.GetBooks(listSearch);
+	}
+
 }

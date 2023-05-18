@@ -1,4 +1,5 @@
-﻿using ManageBooks.Models;
+﻿using ManageBooks.Dtos;
+using ManageBooks.Models;
 using Microsoft.AspNetCore.Components;
 using System.Net;
 
@@ -15,9 +16,10 @@ namespace LibraryManager.Services
 		}
 		public List<Book> Books { get ; set ; } = new List<Book>();
 
-		public async Task CreateBook(Book book)
+		public async Task<bool> CreateBook(CreateBookRequest request)
 		{
-			await _httpClient.PostAsJsonAsync("/api/Book/create", book);
+			var result = await _httpClient.PostAsJsonAsync("/api/Book/create", request);
+			return result.IsSuccessStatusCode;
 		}
 
 		public Task DeleteBook(int id)
@@ -25,10 +27,6 @@ namespace LibraryManager.Services
 			throw new NotImplementedException();
 		}
 
-		public Task<Book?> GetBookByAuthor(string author)
-		{
-			throw new NotImplementedException();
-		}
 
 		public async Task<Book?> GetBookById(int id)
 		{
@@ -40,14 +38,12 @@ namespace LibraryManager.Services
 			return null;
 		}
 
-		public Task<Book?> GetBookByTitle(string title)
-		{
-			throw new NotImplementedException();
-		}
 
-		public async Task GetBooks()
+		public async Task GetBooks(BookListSearch bookListSearch)
 		{
-			var listBooks = await _httpClient.GetFromJsonAsync<List<Book>>("/api/Book");
+			string url = $"/api/Book?title={bookListSearch.Title}&author={bookListSearch.Author}&genre={bookListSearch.Genre}";
+
+			var listBooks = await _httpClient.GetFromJsonAsync<List<Book>>(url);
 			if(listBooks != null)
 			{
 				Books = listBooks;

@@ -1,4 +1,5 @@
 ﻿
+using ManageBooks.Dtos;
 using ManageBooks.Models;
 
 namespace LibraryManager.Services
@@ -6,11 +7,9 @@ namespace LibraryManager.Services
 	public interface IBookService
 	{
 		List<Book> Books { get; set; }
-		Task GetBooks();
+		Task GetBooks(BookListSearch bookListSearch);
 		Task<Book?> GetBookById(int id);
-		Task<Book?> GetBookByTitle(string title);
-		Task<Book?> GetBookByAuthor(string author);
-		Task CreateBook(Book book);
+		Task<bool> CreateBook(CreateBookRequest request);
 		Task UpdateBook(int id, Book book);
 		Task DeleteBook(int id);
 

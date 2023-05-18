@@ -5,7 +5,7 @@ namespace ManageBooks.Interfaces
 {
     public interface IBookRepository
     {
-        Task<List<Book>> GetBooks();
+        Task<List<Book>> GetBooks(BookListSearch bookListSearch);
         Task<List<Book>> GetBooksByGenre(string genre);
         Task<List<Book>> GetFavBooks();
         Task<List<Book>> GetNewBooks(); 
