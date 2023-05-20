@@ -25,10 +25,8 @@
 				<label for="password">Password</label>
 				<InputText type="password" id="password" class="form-control" @bind-Value="loginModel.Password"></InputText> 
 				<ValidationMessage For="()=> loginModel.Password"></ValidationMessage>
-			</div>
-			<div class="row">
-				<button type="submit" class="btn btn-success mt-4">Login</button>
-			</div>
+			</div>	
+				<button type="submit" class="btn btn-success">Login</button>
 		</EditForm>
 	</div>
 
@@ -45,7 +43,7 @@
 		var result = await AuthService.Login(loginModel);
 		if (result.IsSuccess)
 		{
-			NavigationManager.NavigateTo("/students");
+			NavigationManager.NavigateTo("/");
 		}
 		else
 		{

@@ -45,7 +45,7 @@
 		<span>Mô tả</span>
 		<InputText id="description" class="form-control" @bind-Value="@request.Description"></InputText>
 	</div>
-	<button class="btn btn-primary">Submit</button>
+	<button class="btn btn-primary mt-4">Submit</button>
 
 </EditForm>
 @code {
@@ -62,7 +62,7 @@
 		if (result)
 		{
 			ToastService.ShowSuccess($"{request.Title} has been updated successfully.");
-			NavigationManager.NavigateTo("/listBooks");
+			NavigationManager.NavigateTo("/bookList");
 		}
 		else
 		{

@@ -46,15 +46,23 @@ namespace ManageBooks.Repositories
 			return await _context.Orders.FirstOrDefaultAsync(x=>x.OrderId == id);
 		}
 
-		public async Task<List<Order>> GetOrders()
+		public async Task<List<OrderDto>> GetOrders()
 		{
-			return await _context.Orders.OrderBy(x => x.CheckedOut).ToListAsync();
+			return await _context.Orders.Include(x => x.Customer).Include(x => x.Book).Select(x => new OrderDto
+			{
+				Id = x.OrderId,
+				CustomerName = x.Customer.CustomerName,
+				BookTitle = x.Book.Title,
+				Status = x.Status,
+				CheckedOut = x.CheckedOut,
+				Returned = x.Returned
+			}).ToListAsync();
 		}
 
 		public async Task<Order> UpdateOrderStatus(Order order)
 		{
 			_context.Orders.Update(order);
-			if(DateTime.Now > order.Returned)
+			if(DateTime.Now > order.CheckedOut.AddDays(14))
 			{
 				order.Status = Shared.Enum.OrderStatus.Expired;
 			}

@@ -8,7 +8,7 @@ namespace ManageBooks.Helper
 	{
 		public AppMapper()
 		{
-			CreateMap<Order, CreateOrderRequest>();
+			CreateMap<Order, OrderDto>();
 			CreateMap<Book, CreateBookRequest>();
 		}
 	}

@@ -9,7 +9,6 @@ namespace Shared.Enum
 {
 	public enum OrderStatus
 	{
-		
 		Active,
 		Returned,
 		Expired

@@ -15,7 +15,6 @@ namespace ManageBooks.Repositories
 		public async Task<Customer> CreateCustomer(Customer customer)
 		{
 			_context.Customers.Add(customer);
-			customer.Status = Shared.Enum.CustomerStatus.Active;
 			await _context.SaveChangesAsync();	
 			return customer;
 		}

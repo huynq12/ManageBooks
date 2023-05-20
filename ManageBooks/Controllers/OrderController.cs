@@ -1,4 +1,5 @@
-﻿using ManageBooks.Dtos;
+﻿using AutoMapper;
+using ManageBooks.Dtos;
 using ManageBooks.Interfaces;
 using ManageBooks.Models;
 using ManageBooks.Repositories;
@@ -15,13 +16,20 @@ namespace ManageBooks.Controllers
 		private readonly IOrderRepository _orderRepository;
 		private readonly IBookRepository _bookRepository;
 		private readonly ICustomerRepository _customerRepository;
+		private readonly IMapper _mapper;
 
-		public OrderController(IOrderRepository orderRepository,IBookRepository bookRepository,ICustomerRepository customerRepository)
+		public OrderController(IOrderRepository orderRepository,
+								IBookRepository bookRepository,
+								ICustomerRepository customerRepository,
+								IMapper mapper)
 		{
 			_orderRepository = orderRepository;
 			_bookRepository = bookRepository;
 			_customerRepository = customerRepository;
+			_mapper = mapper;
 		}
+		
+
 		//lấy ra danh sách tất cả các đơn đặt mượn sách(bao gồm cả đơn đã trả)
 		[HttpGet]
 		public async Task<IActionResult> GetOrders()
@@ -30,10 +38,11 @@ namespace ManageBooks.Controllers
 			return Ok(result);
 		}
 		//lấy ra danh sách các đơn đang mượn
-		[HttpGet("active-order")]
+		[HttpGet("active-orders")]
 		public async Task<IActionResult> GetActiveOrders()
 		{
 			var result = await _orderRepository.GetActiveOrders();
+			
 			return Ok(result);
 		}
 		//lấy ra danh sách các đơn quá hạn để thông báo nhắc nhở bạn đọc
@@ -41,6 +50,7 @@ namespace ManageBooks.Controllers
 		public async Task<IActionResult> GetExpiredOrders()
 		{
 			var result = await _orderRepository.GetExpiredOrders();
+			
 			return Ok(result);
 		}
 		//tìm đon mượn qua id
@@ -78,9 +88,11 @@ namespace ManageBooks.Controllers
 			var newOrder = await _orderRepository.CreateOrder(new Order()
 			{
 				CustomerId = orderDto.CustomerId,
+				Customer = orderingCustomer,
 				BookId = orderDto.BookId,
+				Book = book,
 				CheckedOut = DateTime.Now,
-				Returned = DateTime.Now.AddDays(14),
+				Returned = null,
 				Status = Shared.Enum.OrderStatus.Active
 			});
 
@@ -111,6 +123,7 @@ namespace ManageBooks.Controllers
 
 			//update status
 			existingOrder.Status = request.Status;
+			existingOrder.Returned = request.Returned;
 			//check status to update quantity
 			if(existingOrder.Status== Shared.Enum.OrderStatus.Returned)
 			{
