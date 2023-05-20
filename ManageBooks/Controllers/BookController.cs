@@ -161,7 +161,7 @@ namespace ManageBooks.Controllers
 
 		}
 		//xoá sách
-		[HttpDelete("delete/{id}")]
+		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteBook(int id)
 		{
 			var existingBook = await _bookRepository.GetBookById(id);

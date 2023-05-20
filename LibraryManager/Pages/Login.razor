@@ -1,7 +1,6 @@
 ﻿@page "/login"
 @using Blazored.LocalStorage;
 @using ManageBooks.Users;
-@using ManageBooks.Users;
 @using LibraryManager.Services;
 
 @inject IAuthService AuthService;
@@ -27,8 +26,8 @@
 				<InputText type="password" id="password" class="form-control" @bind-Value="loginModel.Password"></InputText> 
 				<ValidationMessage For="()=> loginModel.Password"></ValidationMessage>
 			</div>
-			<div class="row mt-4">
-				<button type="submit" class="btn btn-success">Login</button>
+			<div class="row">
+				<button type="submit" class="btn btn-success mt-4">Login</button>
 			</div>
 		</EditForm>
 	</div>

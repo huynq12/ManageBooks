@@ -4,6 +4,7 @@
 @using ManageBooks.Dtos;
 
 @inject IBookService BookService
+@inject IToastService ToastService
 @inject NavigationManager NavigationManager
 
 @if(BookService.Books == null)
@@ -14,6 +15,10 @@ else
 {
 	<div class="row mt-4">
 		<SearchListBook OnSearch="SearchBook"></SearchListBook>
+	</div>
+	<div>
+		<button class="btn btn-success" @onclick="CreateBook" style="width=200px">Thêm sách</button>
+
 	</div>
 	<div class="row mt-2">
 		<table class="table">
@@ -48,19 +53,32 @@ else
 								<i class="oi oi-pencil"></i>
 							</button>
 						</td>
+						<td>
+							<button class="btn btn-danger" @onclick="(()=>DeleteHandle(book.BookId))">
+								<i class="oi oi-x"></i>
+							</button>
+						</td>
 					</tr>
 				}
 
-				<button class="btn btn-success" @onclick="CreateBook">Thêm sách</button>
 
 			</tbody>
 		</table>
 	</div>
-
+	<Confirmation ConfirmationMessage="Are you sure to delete?"
+			  ConfirmationTitle="Delete Book"
+			  @ref="DeleteConfirmation"
+			  ConfirmationChanged="OnConfirmDeleteBook">
+	</Confirmation>
 }
 
 @code {
 	private BookListSearch listSearch = new BookListSearch();
+
+	protected Confirmation DeleteConfirmation { set; get; }
+
+	private int DeleteId { set; get; }
+
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -68,7 +86,7 @@ else
 	}
 	void EditHandle(int id)
 	{
-		NavigationManager.NavigateTo($"/book/{id}");
+		NavigationManager.NavigateTo($"/bookEdit/{id}");
 	}
 	void CreateBook()
 	{
@@ -78,6 +96,22 @@ else
 	{
 		listSearch = bookListSearch;
 		await BookService.GetBooks(listSearch);
+	}
+	public void DeleteHandle(int deleteId)
+	{
+		DeleteId = deleteId;
+		DeleteConfirmation.Show();
+	}
+
+	public async Task OnConfirmDeleteBook(bool deleteConfirmed)
+	{
+		if (deleteConfirmed)
+		{
+			await BookService.DeleteBook(DeleteId);
+			await BookService.GetBooks(listSearch);
+		}
+
+		
 	}
 
 }

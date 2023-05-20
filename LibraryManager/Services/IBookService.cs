@@ -10,8 +10,8 @@ namespace LibraryManager.Services
 		Task GetBooks(BookListSearch bookListSearch);
 		Task<Book?> GetBookById(int id);
 		Task<bool> CreateBook(CreateBookRequest request);
-		Task UpdateBook(int id, Book book);
-		Task DeleteBook(int id);
+		Task<bool> UpdateBook(int id, Book book);
+		Task<bool> DeleteBook(int id);
 
 	}
 }

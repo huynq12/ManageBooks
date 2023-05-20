@@ -22,9 +22,10 @@ namespace LibraryManager.Services
 			return result.IsSuccessStatusCode;
 		}
 
-		public Task DeleteBook(int id)
+		public async Task<bool> DeleteBook(int id)
 		{
-			throw new NotImplementedException();
+			var result = await _httpClient.DeleteAsync($"/api/Book/{id}");
+			return result.IsSuccessStatusCode;
 		}
 
 
@@ -50,9 +51,10 @@ namespace LibraryManager.Services
 			}
 		}
 
-		public async Task UpdateBook(int id, Book book)
+		public async Task<bool> UpdateBook(int id, Book book)
 		{
-			await _httpClient.PutAsJsonAsync($"/api/Book/{id}",book);
+			var result = await _httpClient.PutAsJsonAsync($"/api/Book/{id}",book);
+			return result.IsSuccessStatusCode;
 		}
 	}
 }
