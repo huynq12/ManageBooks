@@ -18,5 +18,7 @@ namespace ManageBooks.Interfaces
         Task<Book> UpdateBookAfterCheckout(Book book);
         Task<Book> UpdateBookQuantityAfterReturn(Book book);
 		Task<Book> DeleteBook(Book book);
+
+        bool isValidBookData(Book book);
     }
 }

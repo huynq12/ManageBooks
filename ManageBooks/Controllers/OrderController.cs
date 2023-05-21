@@ -93,7 +93,8 @@ namespace ManageBooks.Controllers
 				Book = book,
 				CheckedOut = DateTime.Now,
 				Returned = null,
-				Status = Shared.Enum.OrderStatus.Active
+				Status = Shared.Enum.OrderStatus.Active,
+				Note = orderDto.Note,
 			});
 
 			//update customer status

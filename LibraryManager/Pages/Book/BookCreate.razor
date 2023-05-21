@@ -1,13 +1,17 @@
-﻿@page "/bookEdit/{id:int}"
-
-
+﻿@page "/bookCreate"
+@using Blazored.Toast.Services;
 @using ManageBooks.Dtos;
-@inject IBookService BookService
+@using ManageBooks.Models
+@using LibraryManager.Services;
+
+@inject IBookService BookService;
+@inject NavigationManager NavigationManager;
 @inject IToastService ToastService
-@inject NavigationManager NavigationManager
-<h3>BookEdit</h3>
+
+<h3>Thêm mới sách</h3>
+
 <EditForm Model="request" OnValidSubmit="Submit">
-	<DataAnnotationsValidator />
+    <DataAnnotationsValidator/>
 	<div>
 		<span>Tiêu đề</span>
 		<InputText id="title" class="form-control" @bind-Value="@request.Title"></InputText>
@@ -38,37 +42,27 @@
 		<InputNumber id="availableCopies" class="form-control" @bind-Value="@request.AvailableCopies"></InputNumber>
 	</div>
 	<div>
-		<span>Số lượt đặt mượn</span>
-		<InputNumber id="orderCount" class="form-control" @bind-Value="@request.OrderCount"></InputNumber>
-	</div>
-	<div>
 		<span>Mô tả</span>
 		<InputText id="description" class="form-control" @bind-Value="@request.Description"></InputText>
 	</div>
 	<button class="btn btn-primary mt-4">Submit</button>
-
 </EditForm>
+
 @code {
-	[Parameter]
-	public int Id { get; set; }
-	private ManageBooks.Models.Book request = new ManageBooks.Models.Book();
-	protected override async Task OnInitializedAsync()
-	{
-		await BookService.GetBookById(Id);
-	}
-	private async Task Submit(EditContext context)
-	{
-		var result = await BookService.UpdateBook(Id,request);
-		if (result)
-		{
-			ToastService.ShowSuccess($"{request.Title} has been updated successfully.");
-			NavigationManager.NavigateTo("/bookList");
-		}
-		else
-		{
-			ToastService.ShowError($"An error occurred in progress. Please contact to administrator.");
+    private CreateBookRequest request = new CreateBookRequest();
 
-		}
-	}
+    private async Task Submit(EditContext context)
+    {
+        var result = await BookService.CreateBook(request);
+        if (result)
+        {
+            ToastService.ShowSuccess($"{request.Title} has been created successfully.");
+            NavigationManager.NavigateTo("/bookList");
+        }
+        else
+        {
+            ToastService.ShowError($"An error occurred in progress. Please contact to administrator.");
 
+        }
+    }
 }

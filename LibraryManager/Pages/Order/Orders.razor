@@ -1,8 +1,11 @@
 ﻿@page "/orderList"
 @using LibraryManager.Components
+
 @inject IOrderService OrderService
+@inject NavigationManager NavigationManager
 
 <h3>Orders</h3>
+<button class="btn btn-primary" @onclick=CreateHandle>Tạo đơn mượn</button>
 <table class="table">
 	<thead>
 		<tr>
@@ -10,8 +13,7 @@
 			<th>Tên khách hàng</th>
 			<th>Tiêu đề sách</th>
 			<th>Trạng thái</th>
-			<th>Thời điểm mượn</th>
-			<th>Thời điểm trả</th>
+			
 		</tr>
 	</thead>
 	<tbody>
@@ -21,9 +23,9 @@
 				<td>@order.Id</td>
 				<td>@order.CustomerName</td>
 				<td>@order.BookTitle</td>
-				<td><StatusLabel Status="@order.Status"></StatusLabel></td>
-				<td>@order.CheckedOut.ToString("dd/MM/yyyy hh:mm")</td>
-				<td>@order.Returned</td>
+				<td>@order.Status</td>
+				@*<td>@order.CheckedOut.ToString("dd/MM/yyyy hh:mm")</td>
+				<td>@order.Returned</td>*@
 			</tr>
 		}
 	</tbody>
@@ -33,5 +35,9 @@
 	protected override async Task OnInitializedAsync()
 	{
 		await OrderService.GetOrders();
+	}
+	void CreateHandle()
+	{
+		NavigationManager.NavigateTo("/orderCreate");
 	}
 }

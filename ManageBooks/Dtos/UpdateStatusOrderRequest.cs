@@ -6,5 +6,6 @@ namespace ManageBooks.Dtos
 	{
 		public OrderStatus Status { get; set; }	
 		public DateTime Returned { get; set; }
+		public string Note { get; set; }
 	}
 }

@@ -112,8 +112,9 @@ namespace ManageBooks.Controllers
 				Release = DateTime.Now
 			});
 
-			if(book.AvailableCopies > book.TotalCopies || book.TotalCopies < 1 || book.AvailableCopies < 1)
+			if(!_bookRepository.isValidBookData(book))
 			{
+				_bookRepository.DeleteBook(book);
 				return BadRequest();
 			}
 			else 
@@ -139,6 +140,11 @@ namespace ManageBooks.Controllers
 			existingBook.Description = bookDto.Description;
 			existingBook.OrderCount = bookDto.OrderCount;
 			existingBook.Release = bookDto.Release;
+
+			if (!_bookRepository.isValidBookData(existingBook))
+			{
+				return BadRequest();
+			}
 
 			var updatedBook = await _bookRepository.UpdateBook(existingBook);	
 			return Ok(updatedBook);

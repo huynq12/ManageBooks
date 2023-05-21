@@ -111,5 +111,14 @@ namespace ManageBooks.Repositories
 			await _context.SaveChangesAsync();
 			return book;
 		}
-	}
+
+        public bool isValidBookData(Book book)
+        {
+			if(book.AvailableCopies > book.TotalCopies || book.AvailableCopies < 1)
+			{
+				return false;
+			}
+			return true;
+        }
+    }
 }

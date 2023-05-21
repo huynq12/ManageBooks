@@ -1,0 +1,46 @@
+﻿@page "/orderCreate"
+@using Blazored.Toast.Services;
+@using ManageBooks.Dtos;
+@using LibraryManager.Services;
+
+@inject IToastService ToastService
+@inject IOrderService OrderService
+@inject NavigationManager NavigationManager
+<h3>OrderCreate</h3>
+<EditForm Model="request" OnValidSubmit="Submit">
+	<DataAnnotationsValidator></DataAnnotationsValidator>
+	<div>
+		<span>Mã khách hàng</span>
+		<InputNumber id="customerId" class="form-control" @bind-Value="@request.CustomerId"></InputNumber>
+		<ValidationMessage For="()=>request.CustomerId"></ValidationMessage>
+	</div>
+	<div>
+		<span>Mã sách</span>
+		<InputNumber id="title" class="form-control" @bind-Value="@request.BookId"></InputNumber>
+		<ValidationMessage For="()=>request.BookId"></ValidationMessage>
+	</div>
+	<div>
+		<span>Ghi chú</span>
+		<InputText id="title" class="form-control" @bind-Value="@request.Note"></InputText>
+	</div>
+	<button class="btn btn-primary mt-4">Submit</button>
+
+</EditForm>
+@code {
+	private CreateOrderRequest request = new CreateOrderRequest();
+
+	private async Task Submit(EditContext context)
+	{
+		var result = await OrderService.CreateOrder(request);
+		if (result)
+		{
+			ToastService.ShowSuccess($"Order has been created successfully.");
+			NavigationManager.NavigateTo("/orderList");
+		}
+		else
+		{
+			ToastService.ShowError($"An error occurred in progress. Please contact to administrator.");
+
+		}
+	}
+}
