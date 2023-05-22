@@ -57,6 +57,7 @@
 		await BookService.GetBookById(Id);
 	}
 
+	
 	protected override async Task OnParametersSetAsync()
 	{
 		var result = await BookService.GetBookById(Id);
@@ -66,7 +67,7 @@
 		}
 		else NavigationManager.NavigateTo("/bookList");
 	}
-
+	
 	private async Task Submit(EditContext context)
 	{
 		var result = await BookService.UpdateBook(Id,request);

@@ -9,7 +9,9 @@ namespace LibraryManager.Services
 		Task GetOrders();
 		Task GetAcitveOrders();
 		Task GetExpiredOrders();
+		Task<Order> GetOrderById(int id);
+		Task<OrderDto> GetOrderDtoById(int id);
 		Task<bool> CreateOrder(CreateOrderRequest request);
-		Task<bool> UpdateOrder(int id, Order order);
+		Task<bool> UpdateOrder(int id, OrderDto orderDto);
 	}
 }

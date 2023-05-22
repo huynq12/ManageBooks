@@ -1,5 +1,6 @@
 ﻿using ManageBooks.Dtos;
 using ManageBooks.Models;
+using System.Net;
 
 namespace LibraryManager.Services
 {
@@ -28,7 +29,26 @@ namespace LibraryManager.Services
             throw new NotImplementedException();
         }
 
-        public async Task GetOrders()
+		public async Task<Order> GetOrderById(int id)
+		{
+			var result = await _httpClient.GetAsync($"/api/Order/{id}");
+			if (result.StatusCode == HttpStatusCode.OK)
+			{
+				return await result.Content.ReadFromJsonAsync<Order>();
+			}
+			return null;
+		}
+
+		public async Task<OrderDto> GetOrderDtoById(int id)
+		{
+			var result = await _httpClient.GetAsync($"/api/OrderDto/{id}");
+			if (result.StatusCode == HttpStatusCode.OK)
+			{
+				return await result.Content.ReadFromJsonAsync<OrderDto>();
+			}
+			return null;
+		}
+		public async Task GetOrders()
 		{
 			var listOrder = await _httpClient.GetFromJsonAsync<List<OrderDto>>("/api/Order");
 			if(listOrder != null)
@@ -37,9 +57,9 @@ namespace LibraryManager.Services
 			}
 		}
 
-		public async Task<bool> UpdateOrder(int id, Order order)
+		public async Task<bool> UpdateOrder(int id, OrderDto orderDto)
 		{
-			var result = await _httpClient.PutAsJsonAsync($"/api/Order/{id}", order);
+			var result = await _httpClient.PutAsJsonAsync($"/api/Order/{id}", orderDto);
 			return result.IsSuccessStatusCode;
 		}
 	}

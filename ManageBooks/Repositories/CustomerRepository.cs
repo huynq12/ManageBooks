@@ -46,12 +46,14 @@ namespace ManageBooks.Repositories
 			await _context.SaveChangesAsync();
 			return customer;
 		}
-
-		/*public async Task<Customer> UpdateCustomerStatus(Customer customer)
+		public async Task<Customer> DeleteCustomer(Customer customer)
 		{
-			
+			_context.Customers.Remove(customer);
 			await _context.SaveChangesAsync();
 			return customer;
-		}*/
+		}
+
+
+
 	}
 }

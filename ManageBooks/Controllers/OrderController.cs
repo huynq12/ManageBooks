@@ -64,6 +64,16 @@ namespace ManageBooks.Controllers
 			}
 			return Ok(order);
 		}
+		[HttpGet("/api/OrderDto/{id}")]
+		public async Task<IActionResult> GetOrderDtoById(int id)
+		{
+			var order = await _orderRepository.GetOrderDtoById(id);
+			if (order == null)
+			{
+				return NotFound();
+			}
+			return Ok(order);
+		}
 		//khởi tạo đơn mượn sách
 		[HttpPost]
 		public async Task<ActionResult> CreateOrder([FromBody] CreateOrderRequest orderDto)

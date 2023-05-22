@@ -73,5 +73,17 @@ namespace ManageBooks.Controllers
 			var updatedCustomer = await _customerRepository.UpdateCustomer(existingCustomer);
 			return Ok(updatedCustomer);
 		}
+
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteCustomer(int id)
+		{
+			var existingCustomer = _customerRepository.GetCustomerById(id);
+			if (existingCustomer == null)
+			{
+				return NotFound();
+			}
+			var deletedCustomer = await _customerRepository.DeleteCustomer(existingCustomer);
+			return Ok(deletedCustomer);
+		}
 	}
 }

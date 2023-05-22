@@ -18,7 +18,7 @@ namespace ManageBooks.Models
 		public OrderStatus Status { get; set; }
 		public DateTime CheckedOut { get; set; }
 		public DateTime? Returned { get; set; }
-		public string Note { get; set; }
+		public string? Note { get; set; }
 		
 	}
 }

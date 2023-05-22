@@ -1,0 +1,60 @@
+﻿@page "/orderDetail/{id:int}"
+@using LibraryManager.Services
+
+@inject IOrderService OrderService
+@inject IToastService ToastService
+@inject NavigationManager NavigationManager
+<h3>OrderDetail</h3>
+<EditForm Model="orderDto" OnValidSubmit="Submit">
+	<DataAnnotationsValidator/>
+	<div>
+		<label>Mã đơn</label>
+		<InputNumber id="orderId" @bind-Value="@orderDto.OrderId"></InputNumber>
+	</div>
+	<div>
+		<label>Trạng thái</label>
+		<InputSelect id="status" @bind-Value="@orderDto.Status"></InputSelect>
+	</div>
+	<div>
+		<label>Thời điểm mượn</label>
+		<InputDate id="checkedout" @bind-Value="@orderDto.CheckedOut"></InputDate>
+	</div>
+	<button class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+	public ManageBooks.Dtos.OrderDto orderDto = new ManageBooks.Dtos.OrderDto();
+
+	protected override async Task OnInitializedAsync()
+	{
+		await OrderService.GetOrderDtoById(Id);
+	}
+
+	protected override async Task OnParametersSetAsync()
+	{
+		var result = await OrderService.GetOrderDtoById(Id);
+		if (result != null)
+		{
+			orderDto = result;
+		}
+		else NavigationManager.NavigateTo("/orderList");
+	}
+
+	private async Task Submit(EditContext context)
+	{
+		var result = await OrderService.UpdateOrder(Id, orderDto);
+		if (result)
+		{
+			ToastService.ShowSuccess($"An order has been updated successfully.");
+			NavigationManager.NavigateTo("/orderList");
+		}
+		else
+		{
+			ToastService.ShowError($"An error occurred in progress. Please contact to administrator.");
+
+		}
+	}
+}

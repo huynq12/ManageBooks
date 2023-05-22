@@ -20,12 +20,17 @@
 		@foreach(var order in OrderService.OrderDtos)
 		{
 			<tr>
-				<td>@order.Id</td>
+				<td>@order.OrderId</td>
 				<td>@order.CustomerName</td>
 				<td>@order.BookTitle</td>
 				<td>@order.Status</td>
-				@*<td>@order.CheckedOut.ToString("dd/MM/yyyy hh:mm")</td>
+				@*<td>@order.CheckedOut.ToString()</td>
 				<td>@order.Returned</td>*@
+				<td>
+					<a class="btn btn-primary" href="/orderDetail/@order.OrderId">
+						<i class="oi oi-pencil"></i>
+					</a>
+				</td>
 			</tr>
 		}
 	</tbody>
@@ -40,4 +45,8 @@
 	{
 		NavigationManager.NavigateTo("/orderCreate");
 	}
+	//void ShowDetail(int id)
+	//{
+	//	NavigationManager.NavigateTo($"/orderDetail/{id}");
+	//}
 }

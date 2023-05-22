@@ -11,5 +11,6 @@ namespace ManageBooks.Interfaces
 		Customer? GetCustomerById(int id);
 		Task<Customer> CreateCustomer(Customer customer);
 		Task<Customer> UpdateCustomer(Customer customer);
+		Task<Customer> DeleteCustomer(Customer customer);
 	}
 }

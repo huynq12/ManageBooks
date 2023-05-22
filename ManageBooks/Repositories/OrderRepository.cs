@@ -41,21 +41,44 @@ namespace ManageBooks.Repositories
 			return await _context.Orders.Where(x=>x.Status==Shared.Enum.OrderStatus.Expired).ToListAsync();
 		}
 
-		public async Task<Order?> GetOrderById(int id)
+		public async Task<Order> GetOrderById(int id)
 		{
-			return await _context.Orders.FirstOrDefaultAsync(x=>x.OrderId == id);
+			return await _context.Orders.Where(x => x.OrderId == id).FirstOrDefaultAsync();
+		}
+
+		public async Task<OrderDto?> GetOrderDtoById(int id)
+		{
+			return await _context.Orders
+				.Include(x => x.Customer)
+				.Include(x => x.Book)
+				.Where(x => x.OrderId == id)
+				.Select(x => new OrderDto
+			{
+				OrderId = x.OrderId,
+				CustomerId = x.CustomerId,
+				CustomerName = x.Customer.CustomerName,
+				CustomerPhone = x.Customer.CustomerPhone,
+				CustomerEmail = x.Customer.CustomerEmail,
+				BookId = x.BookId,
+				BookTitle = x.Book.Title,
+				Author= x.Book.Author,
+				Status = x.Status,
+				CheckedOut = x.CheckedOut,
+				Returned = x.Returned
+			}).FirstOrDefaultAsync();
 		}
 
 		public async Task<List<OrderDto>> GetOrders()
 		{
-			return await _context.Orders.Include(x => x.Customer).Include(x => x.Book).Select(x => new OrderDto
+			return await _context.Orders
+				.Include(x => x.Customer)
+				.Include(x => x.Book)
+				.Select(x => new OrderDto
 			{
-				Id = x.OrderId,
+				OrderId = x.OrderId,
 				CustomerName = x.Customer.CustomerName,
 				BookTitle = x.Book.Title,
-				Status = x.Status,
-				CheckedOut = x.CheckedOut,
-				Returned = x.Returned
+				Status = x.Status			
 			}).ToListAsync();
 		}
 
