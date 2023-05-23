@@ -120,5 +120,10 @@ namespace ManageBooks.Repositories
 			}
 			return true;
         }
-    }
+
+		public Book? GetABookById(int id)
+		{
+			return _context.Books.Where(x=>x.BookId==id).FirstOrDefault();
+		}
+	}
 }

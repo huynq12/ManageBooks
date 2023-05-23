@@ -57,9 +57,9 @@ namespace LibraryManager.Services
 			}
 		}
 
-		public async Task<bool> UpdateOrder(int id, OrderDto orderDto)
+		public async Task<bool> UpdateOrderStatus(int id, Order order)
 		{
-			var result = await _httpClient.PutAsJsonAsync($"/api/Order/{id}", orderDto);
+			var result = await _httpClient.PutAsJsonAsync($"/api/Order/{id}", order);
 			return result.IsSuccessStatusCode;
 		}
 	}

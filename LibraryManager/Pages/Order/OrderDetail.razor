@@ -1,32 +1,64 @@
 ﻿@page "/orderDetail/{id:int}"
 @using LibraryManager.Services
+@using global::Shared.Enum;
 
 @inject IOrderService OrderService
 @inject IToastService ToastService
 @inject NavigationManager NavigationManager
 <h3>OrderDetail</h3>
-<EditForm Model="orderDto" OnValidSubmit="Submit">
-	<DataAnnotationsValidator/>
-	<div>
-		<label>Mã đơn</label>
-		<InputNumber id="orderId" @bind-Value="@orderDto.OrderId"></InputNumber>
-	</div>
-	<div>
-		<label>Trạng thái</label>
-		<InputSelect id="status" @bind-Value="@orderDto.Status"></InputSelect>
-	</div>
-	<div>
-		<label>Thời điểm mượn</label>
-		<InputDate id="checkedout" @bind-Value="@orderDto.CheckedOut"></InputDate>
-	</div>
-	<button class="btn btn-primary">Submit</button>
-</EditForm>
+<table class="table">
+	<tr>
+		<td>Mã đơn:</td>
+		<td>@orderDto.OrderId</td>
+	</tr>
+	<tr>
+		<td>Mã khách hàng:</td>
+		<td>@orderDto.CustomerId</td>
+	</tr>
+	<tr>
+		<td>Tên khách hàng:</td>
+		<td>@orderDto.CustomerName</td>
+	</tr>
+	<tr>
+		<td>Mã sách:</td>
+		<td>@orderDto.BookId</td>
+	</tr>
+	<tr>
+		<td>Tiêu đề sách:</td>
+		<td>@orderDto.BookTitle</td>
+	</tr>
+	<tr>
+		<td>Trạng thái:</td>
+		<td>@orderDto.Status</td>
+	</tr>
+	<tr>
+		<td>Thời điểm mượn:</td>
+		<td>@orderDto.CheckedOut.ToString("dd/M/yyyy hh:mm")</td>
+	</tr>
+	@if (orderDto.Returned.HasValue && orderDto.Status == OrderStatus.Returned)
+	{
+		<tr>
+			<td>Thời điểm trả:</td>
+			<td>@orderDto.Returned.Value.Day-@orderDto.Returned.Value.Month
+			-@orderDto.Returned.Value.Year @orderDto.Returned.Value.Hour:@orderDto.Returned.Value.Minute</td>
+		</tr>
+	}
+
+</table>
+@if(orderDto.Status == OrderStatus.Active)
+{
+	<EditForm Model="order" OnValidSubmit="Submit">
+		<button class="btn btn-primary">Submit</button>
+	</EditForm>
+}
 
 @code {
 	[Parameter]
 	public int Id { get; set; }
 
 	public ManageBooks.Dtos.OrderDto orderDto = new ManageBooks.Dtos.OrderDto();
+	public ManageBooks.Models.Order order = new ManageBooks.Models.Order();
+
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -43,9 +75,9 @@
 		else NavigationManager.NavigateTo("/orderList");
 	}
 
-	private async Task Submit(EditContext context)
+	private async void Submit(EditContext context)
 	{
-		var result = await OrderService.UpdateOrder(Id, orderDto);
+		var result = await OrderService.UpdateOrderStatus(Id, order);
 		if (result)
 		{
 			ToastService.ShowSuccess($"An order has been updated successfully.");

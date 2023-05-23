@@ -133,8 +133,8 @@ namespace ManageBooks.Controllers
 			var customer = _customerRepository.GetCustomerById(existingOrder.CustomerId);
 
 			//update status
-			existingOrder.Status = request.Status;
-			existingOrder.Returned = request.Returned;
+			existingOrder.Status = Shared.Enum.OrderStatus.Returned;
+			existingOrder.Returned = DateTime.Now;
 			//check status to update quantity
 			if(existingOrder.Status== Shared.Enum.OrderStatus.Returned)
 			{
