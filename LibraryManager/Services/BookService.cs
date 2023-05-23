@@ -45,7 +45,10 @@ namespace LibraryManager.Services
 			string url = $"/api/Book?title={bookListSearch.Title}&author={bookListSearch.Author}&genre={bookListSearch.Genre}";
 
 			var listBooks = await _httpClient.GetFromJsonAsync<List<Book>>(url);
-			Books = listBooks;
+			if(listBooks != null)
+			{
+				Books = listBooks;
+			}
 		}
 
 		public async Task<bool> UpdateBook(int id, Book book)

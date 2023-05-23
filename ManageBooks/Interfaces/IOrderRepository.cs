@@ -5,7 +5,7 @@ namespace ManageBooks.Interfaces
 {
     public interface IOrderRepository
     {
-        Task<List<OrderDto>> GetOrders();
+        Task<List<Order>> GetOrders(OrderListSearch orderListSearch);
         Task<List<Order>> GetActiveOrders();
         Task<List<Order>> GetExpiredOrders();
         Task<Order> GetOrderById(int id);

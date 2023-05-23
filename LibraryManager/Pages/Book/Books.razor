@@ -7,12 +7,7 @@
 @inject IToastService ToastService
 @inject NavigationManager NavigationManager
 
-@if(BookService.Books == null)
-{
-	<LoadingIndicator></LoadingIndicator>
-}
-else
-{
+
 	<div class="row mt-4">
 		<SearchListBook OnSearch="SearchBook"></SearchListBook>
 	</div>
@@ -32,7 +27,7 @@ else
 					<th>Tổng số bản in</th>
 					<th>Số bản có sẵn</th>
 					<th>Số lượt đặt mượn</th>
-					<th>Mô tả</th>
+					
 				</tr>
 			</thead>
 			<tbody>
@@ -47,7 +42,7 @@ else
 						<td>@book.TotalCopies</td>
 						<td>@book.AvailableCopies</td>
 						<td>@book.OrderCount</td>
-						<td>@book.Description</td>
+						
 						<td>
 							<button class="btn btn-primary" @onclick="(()=>EditHandle(book.BookId))">
 								<i class="oi oi-pencil"></i>
@@ -70,7 +65,7 @@ else
 			  @ref="DeleteConfirmation"
 			  ConfirmationChanged="OnConfirmDeleteBook">
 	</Confirmation>
-}
+
 
 @code {
 	private BookListSearch listSearch = new BookListSearch();

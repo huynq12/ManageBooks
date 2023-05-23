@@ -68,18 +68,23 @@ namespace ManageBooks.Repositories
 			}).FirstOrDefaultAsync();
 		}
 
-		public async Task<List<OrderDto>> GetOrders()
+		public async Task<List<Order>> GetOrders(OrderListSearch orderListSearch)
 		{
-			return await _context.Orders
-				.Include(x => x.Customer)
-				.Include(x => x.Book)
-				.Select(x => new OrderDto
-			{
-				OrderId = x.OrderId,
-				CustomerName = x.Customer.CustomerName,
-				BookTitle = x.Book.Title,
-				Status = x.Status			
-			}).ToListAsync();
+			var query = _context.Orders.Include(x=>x.Book).Include(x => x.Customer).AsQueryable();
+
+			if (orderListSearch.OrderId.HasValue)
+				query = query.Where(x=>x.OrderId== orderListSearch.OrderId.Value);
+
+			if (!string.IsNullOrEmpty(orderListSearch.BookTitle))
+				query = query.Where(x => x.Book.Title.Contains(orderListSearch.BookTitle));
+
+			if (!string.IsNullOrEmpty(orderListSearch.CustomerName))
+				query = query.Where(x => x.Customer.CustomerName.Contains(orderListSearch.CustomerName));
+
+			if (orderListSearch.Status.HasValue)
+				query = query.Where(x => x.Status == orderListSearch.Status.Value);
+
+			return await query.ToListAsync();
 		}
 
 		public async Task<Order> UpdateOrderStatus(Order order)

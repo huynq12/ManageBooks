@@ -48,9 +48,10 @@ namespace LibraryManager.Services
 			}
 			return null;
 		}
-		public async Task GetOrders()
+		public async Task GetOrders(OrderListSearch orderListSearch)
 		{
-			var listOrder = await _httpClient.GetFromJsonAsync<List<OrderDto>>("/api/Order");
+			string url = $"/api/Order?orderid={orderListSearch.OrderId}&title={orderListSearch.BookTitle}&customer={orderListSearch.CustomerName}&status={orderListSearch.Status}";
+			var listOrder = await _httpClient.GetFromJsonAsync<List<OrderDto>>(url);
 			if(listOrder != null)
 			{
 				OrderDtos = listOrder;

@@ -1,17 +1,21 @@
 ﻿@page "/orderList"
 @using LibraryManager.Components
+@using ManageBooks.Dtos;
 
 @inject IOrderService OrderService
 @inject NavigationManager NavigationManager
 
 <h3>Orders</h3>
-<button class="btn btn-primary" @onclick=CreateHandle>Tạo đơn mượn</button>
+<div class="row mt-4">
+		<SearchListOrder OnSearch="SearchOrder"></SearchListOrder>
+	</div>
+<button class="btn btn-primary mt-4" @onclick=CreateHandle>Tạo đơn mượn</button>
 <table class="table">
 	<thead>
 		<tr>
 			<th>Mã đơn</th>
-			<th>Tên khách hàng</th>
 			<th>Tiêu đề sách</th>
+			<th>Tên khách hàng</th>
 			<th>Trạng thái</th>
 			
 		</tr>
@@ -21,8 +25,8 @@
 		{
 			<tr>
 				<td>@order.OrderId</td>
-				<td>@order.CustomerName</td>
 				<td>@order.BookTitle</td>
+				<td>@order.CustomerName</td>
 				<td>@order.Status</td>
 				@*<td>@order.CheckedOut.ToString()</td>
 				<td>@order.Returned</td>*@
@@ -36,14 +40,20 @@
 	</tbody>
 </table>
 @code {
+	private OrderListSearch listSearch = new OrderListSearch();
 
 	protected override async Task OnInitializedAsync()
 	{
-		await OrderService.GetOrders();
+		await OrderService.GetOrders(listSearch);
 	}
 	void CreateHandle()
 	{
 		NavigationManager.NavigateTo("/orderCreate");
+	}
+	private async Task SearchOrder(OrderListSearch orderListSearch)
+	{
+		listSearch = orderListSearch;
+		await OrderService.GetOrders(listSearch);
 	}
 	//void ShowDetail(int id)
 	//{

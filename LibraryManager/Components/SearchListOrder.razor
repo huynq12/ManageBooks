@@ -1,0 +1,49 @@
+﻿@using ManageBooks.Dtos;
+@using global::Shared.Enum;
+<div class="row">
+	<EditForm Model="@listSearch" OnSubmit="@SearchForm">
+		<div class="row">
+			<div class="col">
+				<label>Mã đơn</label>
+				<InputNumber class="form-control" @bind-Value="listSearch.OrderId"></InputNumber>
+			</div>
+			<div class="col">
+				<label>Tiêu đề sách</label>
+				<InputText class="form-control" @bind-Value="listSearch.BookTitle"></InputText>
+			</div>
+			<div class="col">
+				<label>Tên khách hàng</label>
+				<InputText class="form-control" @bind-Value="listSearch.CustomerName"></InputText>
+			</div>
+			<div class="col">
+				<label>Trạng thái</label>
+				<InputSelect class="form-control" @bind-Value="listSearch.Status">
+					<option>--Select--</option>
+					@foreach(string item in Enum.GetNames(typeof(OrderStatus)))
+					{
+						<option value="@item">@item</option>
+
+					}
+				</InputSelect>
+			</div>
+			<div class="col mt-4">
+				<button type="submit" class="btn btn-primary">Search</button>
+			</div>
+
+		</div>
+
+	</EditForm>
+</div>
+@code {
+	private OrderListSearch listSearch = new OrderListSearch();
+
+	[Parameter]
+	public EventCallback<OrderListSearch> OnSearch { set; get; }
+
+	private async Task SearchForm(EditContext context)
+	{
+		await OnSearch.InvokeAsync(listSearch);
+
+	}
+
+}

@@ -35,6 +35,14 @@
 		<td>Thời điểm mượn:</td>
 		<td>@orderDto.CheckedOut.ToString("dd/M/yyyy hh:mm")</td>
 	</tr>
+	<tr>
+		<td>SĐT:</td>
+		<td>@orderDto.CustomerPhone</td>
+	</tr>
+	<tr>
+		<td>Email:</td>
+		<td>@orderDto.CustomerEmail</td>
+	</tr>
 	@if (orderDto.Returned.HasValue && orderDto.Status == OrderStatus.Returned)
 	{
 		<tr>
@@ -48,7 +56,7 @@
 @if(orderDto.Status == OrderStatus.Active)
 {
 	<EditForm Model="order" OnValidSubmit="Submit">
-		<button class="btn btn-primary">Submit</button>
+		<button class="btn btn-primary" >Trả sách</button>
 	</EditForm>
 }
 
@@ -74,9 +82,11 @@
 		}
 		else NavigationManager.NavigateTo("/orderList");
 	}
+	
 
-	private async void Submit(EditContext context)
+	private async Task Submit(EditContext context)
 	{
+
 		var result = await OrderService.UpdateOrderStatus(Id, order);
 		if (result)
 		{
@@ -89,4 +99,5 @@
 
 		}
 	}
+	
 }

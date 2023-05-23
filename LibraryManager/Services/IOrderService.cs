@@ -6,7 +6,7 @@ namespace LibraryManager.Services
 	public interface IOrderService
 	{
 		List<OrderDto> OrderDtos { get; set; }
-		Task GetOrders();
+		Task GetOrders(OrderListSearch orderListSearch);
 		Task GetAcitveOrders();
 		Task GetExpiredOrders();
 		Task<Order> GetOrderById(int id);

@@ -6,6 +6,7 @@ using ManageBooks.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models;
 
 namespace ManageBooks.Controllers
 {
@@ -32,9 +33,16 @@ namespace ManageBooks.Controllers
 
 		//lấy ra danh sách tất cả các đơn đặt mượn sách(bao gồm cả đơn đã trả)
 		[HttpGet]
-		public async Task<IActionResult> GetOrders()
+		public async Task<IActionResult> GetOrders([FromQuery] OrderListSearch orderListSearch)
 		{
-			var result = await _orderRepository.GetOrders();
+			var listOrder = await _orderRepository.GetOrders(orderListSearch);
+			var result = listOrder.Select(x => new OrderDto
+			{
+				OrderId = x.OrderId,
+				CustomerName = x.Customer.CustomerName,
+				BookTitle = x.Book.Title,
+				Status = x.Status
+			}).ToList();
 			return Ok(result);
 		}
 		//lấy ra danh sách các đơn đang mượn
@@ -156,6 +164,13 @@ namespace ManageBooks.Controllers
 			{
 				return NotFound();
 			}
+			Book bookToUpdate = _bookRepository.GetABookById(existingOrder.BookId);
+			bookToUpdate.AvailableCopies++;
+			bookToUpdate.OrderCount--;
+
+			var orderingCustomer = _customerRepository.GetCustomerById(existingOrder.CustomerId);
+			orderingCustomer.Status = Shared.Enum.CustomerStatus.None;
+			await _customerRepository.UpdateCustomer(orderingCustomer);
 
 			var deletedOrder = await _orderRepository.DeleteOrder(existingOrder);
 			return Ok(deletedOrder);
