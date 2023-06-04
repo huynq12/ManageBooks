@@ -4,6 +4,7 @@
 
 @inject IOrderService OrderService
 @inject NavigationManager NavigationManager
+@inject IToastService ToastService
 
 <h3>Orders</h3>
 <div class="row mt-4">
@@ -28,20 +29,32 @@
 				<td>@order.BookTitle</td>
 				<td>@order.CustomerName</td>
 				<td>@order.Status</td>
-				@*<td>@order.CheckedOut.ToString()</td>
-				<td>@order.Returned</td>*@
 				<td>
 					<a class="btn btn-primary" href="/orderDetail/@order.OrderId">
 						<i class="oi oi-pencil"></i>
 					</a>
 				</td>
+				<td>
+						<button class="btn btn-danger" @onclick="(()=>DeleteHandle(order.OrderId))">
+							<i class="oi oi-x"></i>
+						</button>
+					</td>
 			</tr>
 		}
 	</tbody>
 </table>
+<Confirmation ConfirmationMessage="Are you sure to delete?"
+			  ConfirmationTitle="Delete Order"
+			  @ref="DeleteConfirmation"
+			  ConfirmationChanged="OnConfirmDeleteOrder">
+</Confirmation>
+
+
 @code {
 	private OrderListSearch listSearch = new OrderListSearch();
+	protected Confirmation DeleteConfirmation { set; get; }
 
+	private int DeleteId { set; get; }
 	protected override async Task OnInitializedAsync()
 	{
 		await OrderService.GetOrders(listSearch);
@@ -55,8 +68,31 @@
 		listSearch = orderListSearch;
 		await OrderService.GetOrders(listSearch);
 	}
-	//void ShowDetail(int id)
-	//{
-	//	NavigationManager.NavigateTo($"/orderDetail/{id}");
-	//}
+	public void DeleteHandle(int deleteId)
+	{
+		DeleteId = deleteId;
+		DeleteConfirmation.Show();
+	}
+
+	public async Task OnConfirmDeleteOrder(bool deleteConfirmed)
+	{
+		if (deleteConfirmed)
+		{
+			var result = await OrderService.DeleteOrder(DeleteId);
+			if (result)
+			{
+				ToastService.ShowSuccess($"order has been deleted successfully.");
+				NavigationManager.NavigateTo("/orderList");
+			}
+			else
+			{
+				ToastService.ShowError($"An error occurred in progress. Please contact to administrator.");
+
+			}
+			//await OrderService.GetOrders(listSearch);
+
+		}
+
+
+	}
 }

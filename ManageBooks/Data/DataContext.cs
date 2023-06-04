@@ -1,7 +1,6 @@
 ﻿using ManageBooks.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Shared.Models;
 
 namespace ManageBooks.Data
 {

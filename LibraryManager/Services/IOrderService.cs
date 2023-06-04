@@ -13,6 +13,7 @@ namespace LibraryManager.Services
 		Task<OrderDto> GetOrderDtoById(int id);
 		Task<bool> CreateOrder(CreateOrderRequest request);
 		Task<bool> UpdateOrderStatus(int id, Order order);
+		Task<bool> DeleteOrder(int id);
 
 	}
 }

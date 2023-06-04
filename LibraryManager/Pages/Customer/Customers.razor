@@ -1,0 +1,116 @@
+﻿@page "/customerList"
+
+
+@using LibraryManager.Components;
+@using LibraryManager.Services;
+@using ManageBooks.Models
+
+
+@inject ICustomerService CustomerService
+@inject IToastService ToastService
+@inject NavigationManager NavigationManager
+
+
+<div>
+	<button class="btn btn-success mt-4" @onclick="CreateCustomer" style="width=200px">Thêm độc giả</button>
+
+</div>
+<div class="row mt-2">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Mã độc giả</th>
+				<th>Tên</th>
+				<th>Số điện thoại</th>
+				<th>Email</th>
+				@*<th>Số lần đặt mượn</th>*@
+				<th>Trạng thái</th>
+				
+
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in CustomerService.Customers)
+			{
+				<tr>
+					<td>@item.CustomerId</td>
+					<td>@item.CustomerName</td>
+					<td>@item.CustomerPhone</td>
+					<td>@item.CustomerEmail</td>
+					@*<td>@item.OrderCount</td>*@
+					<td>@item.Status</td>
+					
+
+					<td>
+						<button class="btn btn-primary" @onclick="(()=>EditHandle(item.CustomerId))">
+							<i class="oi oi-pencil"></i>
+						</button>
+					</td>
+					<td>
+						<button class="btn btn-danger" @onclick="(()=>DeleteHandle(item.CustomerId))">
+							<i class="oi oi-x"></i>
+						</button>
+					</td>
+				</tr>
+			}
+
+
+		</tbody>
+	</table>
+</div>
+<Confirmation ConfirmationMessage="Are you sure to delete?"
+			  ConfirmationTitle="Delete Customer"
+			  @ref="DeleteConfirmation"
+			  ConfirmationChanged="OnConfirmDeleteCustomer">
+</Confirmation>
+
+
+@code {
+
+	protected Confirmation DeleteConfirmation { set; get; }
+
+	private int DeleteId { set; get; }
+
+
+	protected override async Task OnInitializedAsync()
+	{
+		await CustomerService.GetCustomers();
+	}
+	void EditHandle(int id)
+	{
+		NavigationManager.NavigateTo($"/customerEdit/{id}");
+	}
+	void CreateCustomer()
+	{
+		NavigationManager.NavigateTo("/customerCreate");
+	}
+	
+	public void DeleteHandle(int deleteId)
+	{
+		DeleteId = deleteId;
+		DeleteConfirmation.Show();
+	}
+
+	public async Task OnConfirmDeleteCustomer(bool deleteConfirmed)
+	{
+		if (deleteConfirmed)
+		{
+			var result = await CustomerService.DeleteCustomer(DeleteId);
+			await CustomerService.GetCustomers();
+			if (result)
+			{
+				ToastService.ShowSuccess($"An customer has been deleted successfully.");
+				NavigationManager.NavigateTo("/bookList");
+			}
+			else
+			{
+				ToastService.ShowError($"An error occurred in progress. Please contact to administrator.");
+
+			}
+		}
+
+
+	}
+
+}
+

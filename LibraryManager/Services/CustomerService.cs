@@ -1,5 +1,8 @@
-﻿using ManageBooks.Dtos;
-using Shared.Models;
+﻿using Azure.Core;
+using LibraryManager.Pages.Customer;
+using ManageBooks.Dtos;
+using ManageBooks.Models;
+
 using System.Net;
 
 namespace LibraryManager.Services
@@ -12,17 +15,22 @@ namespace LibraryManager.Services
 		{
 			_httpClient = httpClient;
 		}
-		public Task<bool> CreateCustomer(Customer customer)
+
+        public List<Customer> Customers { get ; set ; } = new List<Customer>();
+
+        public async Task<bool> CreateCustomer(Customer customer)
 		{
-			throw new NotImplementedException();
+			var result = await _httpClient.PostAsJsonAsync("/api/Customer", customer);
+			return result.IsSuccessStatusCode;
 		}
 
-		public Task<bool> DeleteCustomer(int id)
+		public async Task<bool> DeleteCustomer(int id)
 		{
-			throw new NotImplementedException();
+			var result = await _httpClient.DeleteAsync($"/api/Customer/{id}");
+			return result.IsSuccessStatusCode;
 		}
 
-		public async Task<Customer> GetCustomerById(int id)
+		public async Task<Customer?> GetCustomerById(int id)
 		{
 			var result = await _httpClient.GetAsync($"/api/Customer/{id}");
 			if (result.StatusCode == HttpStatusCode.OK)
@@ -32,14 +40,20 @@ namespace LibraryManager.Services
 			return null;
 		}
 
-		public Task<List<Customer>> GetCustomers()
-		{
-			throw new NotImplementedException();
+
+        public async Task<bool> UpdateCustomer(int id, Customer customer)
+        {
+			var result = await _httpClient.PutAsJsonAsync($"/api/Customer/{id}", customer);
+			return result.IsSuccessStatusCode;
 		}
 
-		public Task<bool> UpdateCustomer(Customer customer)
-		{
-			throw new NotImplementedException();
-		}
-	}
+        public async Task GetCustomers()
+        {
+			var list = await _httpClient.GetFromJsonAsync<List<Customer>>("/api/Customer");
+			if(list != null)
+			{
+				Customers = list;
+			}
+        }
+    }
 }

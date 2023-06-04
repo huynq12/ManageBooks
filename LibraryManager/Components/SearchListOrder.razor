@@ -1,7 +1,7 @@
 ﻿@using ManageBooks.Dtos;
 @using global::Shared.Enum;
 <div class="row">
-	<EditForm Model="@listSearch" OnSubmit="@SearchForm">
+	<EditForm Model="listSearch" OnSubmit="SearchForm">
 		<div class="row">
 			<div class="col">
 				<label>Mã đơn</label>
@@ -18,7 +18,7 @@
 			<div class="col">
 				<label>Trạng thái</label>
 				<InputSelect class="form-control" @bind-Value="listSearch.Status">
-					<option>--Select--</option>
+					<option>--</option>
 					@foreach(string item in Enum.GetNames(typeof(OrderStatus)))
 					{
 						<option value="@item">@item</option>

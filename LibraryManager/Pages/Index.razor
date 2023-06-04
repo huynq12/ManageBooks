@@ -1,9 +1,47 @@
 ﻿@page "/"
+@using ManageBooks.Dtos;
 
-<PageTitle>Index</PageTitle>
+@inject IReportService ReportService
+@inject NavigationManager NavigationManager
+<h3>Have a nive day</h3>
+@*<table class="table table-bordered">
+	@foreach(var report in ReportService.Reports)
+	{
+	<tr>
+			<td>Số đầu sách</td>
+			<td>@report.BookCount</td>
+		</tr>
+		<tr>
+			<td>Tổng số bản in</td>
+			<td>@report.TotalBookCopies</td>
+	</tr>
+		<tr>
+			<td>Số bản in có sẵn</td>
+			<td>@report.TotalBookAvailable</td>
+		</tr>
+		<tr>
+		<td>Số lượt mượn</td>
+			<td>@report.TotalOrderCount</td>
+		</tr>
+		<tr>
+			<td>Độc giả tiềm năng</td>
+			<td>@report.TheBestOrderCustomer</td>
+		</tr>
+		<tr>
+			<td>Sách yêu thích nhất</td>
+			<td>@report.TheBestOrderBook</td>
+		</tr>
+	}
 
-<h1>Hello, world!</h1>
+</table>
+*@
+@code{
+	//private ManageBooks.Dtos.Report report = new ManageBooks.Dtos.Report();
+	
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+	//protected override async Task OnInitializedAsync()
+	//{
+	//	await ReportService.GetReport();
+	//}
+	
+}

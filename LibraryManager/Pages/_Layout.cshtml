@@ -12,9 +12,27 @@
     <link href="css/site.css" rel="stylesheet" />
     <link href="LibraryManager.styles.css" rel="stylesheet" />
     <link href="_content/Blazored.Toast/blazored-toast.min.css" rel="stylesheet" />
+
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
 </head>
+<style>
+    #header{
+        background-color: #302dee;
+    }
+    .Ten {
+        display: inline-block;
+        margin-left: 50%;
+        transform: translate(-50%);
+        margin-top: 20px;
+        font-weight: 700;
+        color:white;
+    }
+</style>
 <body>
+    <div id="header">
+        <h3 class="Ten">QUẢN LÝ THƯ VIỆN NAM HẢI </h3>
+        
+    </div>
     @RenderBody()
 
     <div id="blazor-error-ui">

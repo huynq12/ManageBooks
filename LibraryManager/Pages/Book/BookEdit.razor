@@ -5,7 +5,7 @@
 @inject IBookService BookService
 @inject IToastService ToastService
 @inject NavigationManager NavigationManager
-<h3>BookEdit</h3>
+<h3>Thông tin sách</h3>
 <EditForm Model="request" OnValidSubmit="Submit">
 	<DataAnnotationsValidator />
 	<div>
@@ -45,7 +45,7 @@
 		<span>Mô tả</span>
 		<InputText id="description" class="form-control" @bind-Value="@request.Description"></InputText>
 	</div>
-	<button class="btn btn-primary mt-4">Submit</button>
+	<button class="btn btn-primary mt-4">Lưu</button>
 
 </EditForm>
 @code {

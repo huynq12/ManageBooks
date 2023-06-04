@@ -1,7 +1,8 @@
 ﻿@inherits LayoutComponentBase
 @using Blazored.Toast.Configuration;
+@using ManageBooks.Users;
 
-<PageTitle>LibraryManager</PageTitle>
+<PageTitle>Thư viện Nam Hải</PageTitle>
 
 <BlazoredToasts 
     Position="ToastPosition.BottomRight" 
@@ -20,13 +21,11 @@
         <div class="top-row px-4">
             <AuthorizeView>
                 <Authorized>
-                    Hello @context.User.Identity.Name
-                    <a href="/logout" class="ml-md-auto">Logout</a>
+                    <a href="/logout" class="ml-md-auto">Đăng xuất</a>
 
                 </Authorized>
                 <NotAuthorized>
                     <a href="/login" class="ml-md-auto">Login</a>
-
                     <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
 
                 </NotAuthorized>

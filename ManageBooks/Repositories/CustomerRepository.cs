@@ -1,7 +1,7 @@
 ﻿using ManageBooks.Data;
 using ManageBooks.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Shared.Models;
+using ManageBooks.Models;
 
 namespace ManageBooks.Repositories
 {
@@ -26,7 +26,7 @@ namespace ManageBooks.Repositories
 
 		public async Task<List<Customer>> GetCustomers()
 		{
-			return await _context.Customers.OrderBy(x=>x.CustomerName).ToListAsync();
+			return await _context.Customers.OrderByDescending(x=>x.Status).ToListAsync();
 		}
 
 		public async Task<List<Customer>> GetExpiredCustomers()

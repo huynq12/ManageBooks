@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Models
+namespace ManageBooks.Models
 {
 	[Table("Customer")]
 	public class Customer
@@ -16,5 +16,6 @@ namespace Shared.Models
 		public string CustomerEmail { get; set; }
 		public string CustomerPhone { get; set; }
 		public CustomerStatus Status { get; set; }
+		//public int? OrderCount { get; set; }
 	}
 }

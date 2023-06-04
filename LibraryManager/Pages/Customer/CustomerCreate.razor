@@ -1,0 +1,54 @@
+﻿@page "/customerCreate"
+
+
+@using Blazored.Toast.Services;
+@using ManageBooks.Models
+@using LibraryManager.Services;
+
+@inject ICustomerService CustomerService;
+@inject NavigationManager NavigationManager;
+@inject IToastService ToastService
+
+<h3>Thêm mới độc giả</h3>
+
+<EditForm Model="customer" OnValidSubmit="Submit">
+	<DataAnnotationsValidator />
+	<div>
+		<span>Tên độc giả</span>
+		<InputText id="customerName" class="form-control" @bind-Value="@customer.CustomerName"></InputText>
+		<ValidationMessage For="()=>customer.CustomerName"></ValidationMessage>
+	</div>
+	<div>
+		<span>Số điện thoại</span>
+		<InputText id="customerPhone" class="form-control" @bind-Value="@customer.CustomerPhone"></InputText>
+		<ValidationMessage For="()=>customer.CustomerPhone"></ValidationMessage>
+
+	</div>
+	<div>
+		<span>Email</span>
+		<InputText id="publisher" class="form-control" @bind-Value="@customer.CustomerEmail"></InputText>
+		<ValidationMessage For="()=>customer.CustomerEmail"></ValidationMessage>
+
+	</div>
+	
+	<button class="btn btn-primary mt-4">Submit</button>
+</EditForm>
+
+@code {
+	private ManageBooks.Models.Customer customer= new Customer();
+
+	private async Task Submit(EditContext context)
+	{
+		var result = await CustomerService.CreateCustomer(customer);
+		if (result)
+		{
+			ToastService.ShowSuccess($"{customer.CustomerName} has been created successfully.");
+			NavigationManager.NavigateTo("/customerList");
+		}
+		else
+		{
+			ToastService.ShowError($"An error occurred in progress. Please contact to administrator.");
+
+		}
+	}
+}

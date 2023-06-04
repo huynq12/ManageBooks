@@ -114,7 +114,7 @@ namespace ManageBooks.Controllers
 
 			if(!_bookRepository.isValidBookData(book))
 			{
-				_bookRepository.DeleteBook(book);
+			    await _bookRepository.DeleteBook(book);
 				return BadRequest();
 			}
 			else 

@@ -2,7 +2,7 @@
 using ManageBooks.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Models;
+using ManageBooks.Models;
 
 namespace ManageBooks.Controllers
 {

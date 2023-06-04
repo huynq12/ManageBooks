@@ -19,7 +19,13 @@ namespace LibraryManager.Services
 			return newOrder.IsSuccessStatusCode;
 		}
 
-        public Task GetAcitveOrders()
+		public async Task<bool> DeleteOrder(int id)
+		{
+			var result = await _httpClient.DeleteAsync($"/api/Order/{id}");
+			return result.IsSuccessStatusCode;
+		}
+
+		public Task GetAcitveOrders()
         {
             throw new NotImplementedException();
         }

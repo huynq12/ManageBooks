@@ -6,7 +6,7 @@ using ManageBooks.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Models;
+
 
 namespace ManageBooks.Controllers
 {
@@ -164,16 +164,21 @@ namespace ManageBooks.Controllers
 			{
 				return NotFound();
 			}
+			if (existingOrder.Status == Shared.Enum.OrderStatus.Returned || existingOrder.Status == Shared.Enum.OrderStatus.Expired)
+				return BadRequest();
+
 			Book bookToUpdate = _bookRepository.GetABookById(existingOrder.BookId);
 			bookToUpdate.AvailableCopies++;
 			bookToUpdate.OrderCount--;
-
 			var orderingCustomer = _customerRepository.GetCustomerById(existingOrder.CustomerId);
+				
 			orderingCustomer.Status = Shared.Enum.CustomerStatus.None;
 			await _customerRepository.UpdateCustomer(orderingCustomer);
-
 			var deletedOrder = await _orderRepository.DeleteOrder(existingOrder);
 			return Ok(deletedOrder);
+			
+			
+
 		}
 	}
 }

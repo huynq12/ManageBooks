@@ -4,7 +4,6 @@ using ManageBooks.Interfaces;
 using ManageBooks.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
-using Shared.Models;
 
 namespace ManageBooks.Repositories
 {

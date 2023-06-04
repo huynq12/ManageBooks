@@ -28,6 +28,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddTransient<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
+
 //builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 

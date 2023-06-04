@@ -1,0 +1,77 @@
+﻿@page "/customerEdit/{id:int}"
+
+@using ManageBooks.Models
+
+
+@inject ICustomerService CustomerService
+@inject IToastService ToastService
+@inject NavigationManager NavigationManager
+
+
+<h3>Thông tin độc giả</h3>
+
+<EditForm Model="customer" OnValidSubmit="Submit">
+	<DataAnnotationsValidator />
+	<div>
+		<span>Tên độc giả</span>
+		<InputText id="customerName" class="form-control" @bind-Value="@customer.CustomerName"></InputText>
+		<ValidationMessage For="()=>customer.CustomerName"></ValidationMessage>
+	</div>
+	<div>
+		<span>Số điện thoại</span>
+		<InputText id="customerPhone" class="form-control" @bind-Value="@customer.CustomerPhone"></InputText>
+		<ValidationMessage For="()=>customer.CustomerPhone"></ValidationMessage>
+
+	</div>
+	@*<div>
+		<span>Số lượt đặt mượn</span>
+		<InputNumber id="publisher" class="form-control" @bind-Value="@customer.OrderCount"></InputNumber>
+		<ValidationMessage For="()=>customer.CustomerEmail"></ValidationMessage>
+
+	</div>*@
+	<div>
+		<span>Email</span>
+		<InputText id="publisher" class="form-control" @bind-Value="@customer.CustomerEmail"></InputText>
+		<ValidationMessage For="()=>customer.CustomerEmail"></ValidationMessage>
+
+	</div>
+
+	<button class="btn btn-primary mt-4">Lưu</button>
+</EditForm>
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+	private ManageBooks.Models.Customer customer = new Customer();
+
+	protected override async Task OnInitializedAsync()
+	{
+		await CustomerService.GetCustomerById(Id);
+	}
+
+
+	protected override async Task OnParametersSetAsync()
+	{
+		var result = await CustomerService.GetCustomerById(Id);
+		if (result != null)
+		{
+			customer = result;
+		}
+		else NavigationManager.NavigateTo("/customerList");
+	}
+
+	private async Task Submit(EditContext context)
+	{
+		var result = await CustomerService.UpdateCustomer(Id, customer);
+		if (result)
+		{
+			ToastService.ShowSuccess($"{customer.CustomerName} has been updated successfully.");
+			NavigationManager.NavigateTo("/customerList");
+		}
+		else
+		{
+			ToastService.ShowError($"An error occurred in progress. Please contact to administrator.");
+
+		}
+	}
+}

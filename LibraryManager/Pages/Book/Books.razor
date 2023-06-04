@@ -1,4 +1,5 @@
-﻿@page "/bookList"
+﻿
+@page "/bookList"
 @using LibraryManager.Components;
 @using LibraryManager.Services;
 @using ManageBooks.Dtos;
@@ -6,20 +7,7 @@
 @inject IBookService BookService
 @inject IToastService ToastService
 @inject NavigationManager NavigationManager
-@*<style>
-    table {
-        background:white;
-    }
-    th {
-        color:black;
-    }
-    .section-table tr {
-        border-bottom:1px solid black;
-    }
-    .section-table td {
-    color: black;
-}
-</style>*@
+
 	<div class="row mt-4">
 		<SearchListBook OnSearch="SearchBook"></SearchListBook>
 	</div>
@@ -114,8 +102,19 @@
 	{
 		if (deleteConfirmed)
 		{
-			await BookService.DeleteBook(DeleteId);
+			var result =  await BookService.DeleteBook(DeleteId);
+			if (result)
+			{
+				ToastService.ShowSuccess($"Book has been deleted successfully.");
+				NavigationManager.NavigateTo("/bookList");
+			}
+			else
+			{
+				ToastService.ShowError($"An error occurred in progress. Please contact to administrator.");
+
+			}
 			await BookService.GetBooks(listSearch);
+
 		}
 
 		
