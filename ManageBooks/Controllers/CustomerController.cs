@@ -65,9 +65,9 @@ namespace ManageBooks.Controllers
 				return NotFound();
 			}
 
-			/*existingCustomer.CustomerName = customer.CustomerName;
+			existingCustomer.CustomerName = customer.CustomerName;
 			existingCustomer.CustomerEmail = customer.CustomerEmail;
-			existingCustomer.CustomerPhone = customer.CustomerPhone;*/
+			existingCustomer.CustomerPhone = customer.CustomerPhone;
 			existingCustomer.Status = customer.Status;
 
 			var updatedCustomer = await _customerRepository.UpdateCustomer(existingCustomer);
