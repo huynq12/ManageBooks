@@ -35,10 +35,10 @@
 					</a>
 				</td>
 				<td>
-						<button class="btn btn-danger" @onclick="(()=>DeleteHandle(order.OrderId))">
-							<i class="oi oi-x"></i>
-						</button>
-					</td>
+					<button class="btn btn-danger" @onclick="(()=>DeleteHandle(order.OrderId))">
+						<i class="oi oi-x"></i>
+					</button>
+				</td>
 			</tr>
 		}
 	</tbody>
@@ -89,7 +89,7 @@
 				ToastService.ShowError($"An error occurred in progress. Please contact to administrator.");
 
 			}
-			//await OrderService.GetOrders(listSearch);
+			await OrderService.GetOrders(listSearch);
 
 		}
 

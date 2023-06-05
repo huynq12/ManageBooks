@@ -17,8 +17,8 @@ namespace ManageBooks.Controllers
 			_context = context;
 		}
 
-		/*[HttpPost]
-		public async Task<IActionResult> GetReport()
+		[HttpPost]
+		/*public async Task<IActionResult> GetReport()
 		{
 			var bookCount = await _context.Books.CountAsync();			
 			var totalCopies = await _context.Books.SumAsync(x=> x.TotalCopies);

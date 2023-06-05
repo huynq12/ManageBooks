@@ -71,8 +71,8 @@ namespace ManageBooks.Repositories
 		{
 			var query = _context.Orders.Include(x=>x.Book).Include(x => x.Customer).AsQueryable();
 
-			if (orderListSearch.OrderId.HasValue)
-				query = query.Where(x=>x.OrderId== orderListSearch.OrderId.Value);
+			/*if (orderListSearch.OrderId.HasValue)
+				query = query.Where(x=>x.OrderId== orderListSearch.OrderId.Value);*/
 
 			if (!string.IsNullOrEmpty(orderListSearch.BookTitle))
 				query = query.Where(x => x.Book.Title.Contains(orderListSearch.BookTitle));

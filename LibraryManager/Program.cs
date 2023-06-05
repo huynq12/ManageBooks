@@ -6,6 +6,7 @@ using LibraryManager.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,10 @@ builder.Services.AddScoped<IReportService, ReportService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-
+/*#if DEBUG
+builder.Services.AddBlazorWebViewDeveloperTools();
+builder.Logging.AddDebug();
+#endif*/
 builder.Services.AddBlazoredToast();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthenticationCore();
